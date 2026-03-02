@@ -1,14 +1,174 @@
-// Search Bar Functionality
-function initSearchBar() {
-    const searchInput = document.getElementById('searchInput');
-    
-    if (!searchInput) {
-        console.warn('Search input not found');
-        return;
+// Smart Search Bar Functionality
+class SmartSearch {
+    constructor() {
+        this.searchInput = document.getElementById('searchInput');
+        this.searchResultsPanel = document.getElementById('searchResults');
+        this.searchIndex = [];
+        this.searchHistory = this.loadSearchHistory();
+        this.searchSuggestions = [];
+        this.selectedSuggestionIndex = -1;
+        this.debounceTimer = null;
+        
+        if (!this.searchInput) return;
+        
+        this.initIndex();
+        this.attachEventListeners();
     }
     
-    function clearHighlights() {
-        // Remove all mark elements and restore text nodes
+    // Build search index from page content
+    initIndex() {
+        const excludedSelectors = 'script, style, .sidebar, .account-menu, button';
+        const pageContent = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, .pick-card, .featured-content, a[href]');
+        
+        pageContent.forEach(element => {
+            if (!element.closest(excludedSelectors) && element.textContent.trim()) {
+                const text = element.textContent.trim();
+                const section = element.closest('section')?.id || 'general';
+                const sectionTitle = element.closest('section')?.querySelector('h2')?.textContent || 'General';
+                const type = this.getContentType(element);
+                
+                this.searchIndex.push({
+                    text: text.substring(0, 100),
+                    fullText: text,
+                    element: element,
+                    section: section,
+                    sectionTitle: sectionTitle,
+                    type: type,
+                    relevance: text.length < 100 ? 10 : 5
+                });
+            }
+        });
+        
+        // Add predefined suggestions (categories, features)
+        this.searchSuggestions = [
+            { text: 'Podcast Automation', category: 'Feature' },
+            { text: 'Video Production', category: 'Feature' },
+            { text: 'Music Creation', category: 'Feature' },
+            { text: 'Event Management', category: 'Feature' },
+            { text: 'Analytics', category: 'Tool' },
+            { text: 'Workflows', category: 'Tool' },
+            { text: 'Projects', category: 'Tool' },
+            { text: 'Pricing', category: 'Page' }
+        ];
+    }
+    
+    getContentType(element) {
+        if (element.classList.contains('pick-card')) return 'project';
+        if (element.classList.contains('featured-content')) return 'featured';
+        if (element.tagName.match(/H[1-6]/)) return 'heading';
+        if (element.tagName === 'P') return 'text';
+        if (element.tagName === 'A') return 'link';
+        return 'content';
+    }
+    
+    loadSearchHistory() {
+        try {
+            const history = localStorage.getItem('optmo_search_history');
+            return history ? JSON.parse(history) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+    
+    saveSearch(term) {
+        if (!term.trim()) return;
+        
+        // Remove duplicate and add to top
+        this.searchHistory = this.searchHistory.filter(h => h !== term);
+        this.searchHistory.unshift(term);
+        
+        // Keep only last 10 searches
+        this.searchHistory = this.searchHistory.slice(0, 10);
+        
+        try {
+            localStorage.setItem('optmo_search_history', JSON.stringify(this.searchHistory));
+        } catch (e) {
+            console.warn('Could not save search history');
+        }
+    }
+    
+    getSuggestions(query) {
+        if (!query.trim()) {
+            // Show history when empty
+            return this.searchHistory.slice(0, 5).map(h => ({
+                text: h,
+                category: '🕒 Recent',
+                isHistory: true
+            }));
+        }
+        
+        const queryLower = query.toLowerCase();
+        const matches = [];
+        
+        // Find matching suggestions
+        this.searchSuggestions.forEach(suggestion => {
+            if (suggestion.text.toLowerCase().includes(queryLower)) {
+                matches.push(suggestion);
+            }
+        });
+        
+        // Find matching content from index
+        this.searchIndex.forEach(item => {
+            if (item.fullText.toLowerCase().includes(queryLower) && !matches.find(m => m.text === item.fullText)) {
+                matches.push({
+                    text: item.text,
+                    category: '📄 ' + (item.type.charAt(0).toUpperCase() + item.type.slice(1)),
+                    section: item.section
+                });
+            }
+        });
+        
+        // Remove duplicates and limit to 6
+        const seen = new Set();
+        return matches.filter(m => {
+            if (seen.has(m.text.toLowerCase())) return false;
+            seen.add(m.text.toLowerCase());
+            return true;
+        }).slice(0, 6);
+    }
+    
+    displaySuggestions(suggestions) {
+        if (!this.searchResultsPanel) return;
+        
+        if (suggestions.length === 0) {
+            this.searchResultsPanel.innerHTML = '<div class="search-empty">No suggestions found</div>';
+            this.searchResultsPanel.style.display = 'block';
+            return;
+        }
+        
+        let html = '<div class="search-suggestions">';
+        suggestions.forEach((sugg, idx) => {
+            const highlighted = idx === this.selectedSuggestionIndex ? 'active' : '';
+            html += `
+                <div class="suggestion-item ${highlighted}" data-index="${idx}">
+                    <span class="suggestion-text">${this.escapeHtml(sugg.text)}</span>
+                    <span class="suggestion-category">${sugg.category}</span>
+                </div>
+            `;
+        });
+        html += '</div>';
+        
+        this.searchResultsPanel.innerHTML = html;
+        this.searchResultsPanel.style.display = 'block';
+        
+        // Attach click handlers
+        this.searchResultsPanel.querySelectorAll('.suggestion-item').forEach((item, idx) => {
+            item.addEventListener('click', () => {
+                this.selectSuggestion(idx, suggestions);
+            });
+        });
+    }
+    
+    selectSuggestion(index, suggestions) {
+        if (index < 0 || index >= suggestions.length) return;
+        
+        const suggestion = suggestions[index];
+        this.searchInput.value = suggestion.text;
+        this.saveSearch(suggestion.text);
+        this.performSearch();
+    }
+    
+    clearHighlights() {
         document.querySelectorAll('mark.search-highlight').forEach(mark => {
             const parent = mark.parentNode;
             while (mark.firstChild) {
@@ -19,132 +179,319 @@ function initSearchBar() {
         document.body.normalize();
     }
     
-    function highlightText(node, searchTerm) {
-        if (node.nodeType === 3) { // Text node
+    highlightText(node, searchTerm) {
+        if (node.nodeType === 3 && node.textContent.trim()) {
             const text = node.textContent;
-            const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            const escapedTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(${escapedTerm})`, 'gi');
             
             if (regex.test(text)) {
                 const span = document.createElement('span');
                 span.innerHTML = text.replace(regex, '<mark class="search-highlight">$1</mark>');
                 node.parentNode.replaceChild(span, node);
             }
-        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
+        } else if (node.nodeType === 1 && !['SCRIPT', 'STYLE'].includes(node.nodeName)) {
             const childNodes = Array.from(node.childNodes);
-            childNodes.forEach(child => {
-                highlightText(child, searchTerm);
-            });
+            childNodes.forEach(child => this.highlightText(child, searchTerm));
         }
     }
     
-    function performSearch() {
-        const searchTerm = searchInput.value.trim();
-        clearHighlights();
-        
-        const searchResultsPanel = document.getElementById('searchResults');
+    performSearch() {
+        const searchTerm = this.searchInput.value.trim();
+        this.clearHighlights();
         
         if (searchTerm === '') {
-            // Show all cards if search is empty
             document.querySelectorAll('.pick-card').forEach(card => {
                 card.style.display = 'block';
                 card.style.backgroundColor = '';
             });
-            if (searchResultsPanel) {
-                searchResultsPanel.style.display = 'none';
+            if (this.searchResultsPanel) {
+                this.searchResultsPanel.style.display = 'none';
             }
             return;
         }
         
+        this.saveSearch(searchTerm);
+        
         const searchTermLower = searchTerm.toLowerCase();
-        const pickCards = document.querySelectorAll('.pick-card');
-        let cardMatches = 0;
-        let otherMatches = 0;
-        const sections = [];
+        const matches = [];
         
-        // Filter and highlight project cards
-        pickCards.forEach(card => {
-            const cardText = card.textContent.toLowerCase();
-            
-            if (cardText.includes(searchTermLower)) {
-                card.style.display = 'block';
-                card.style.backgroundColor = 'rgba(128, 0, 32, 0.1)';
-                cardMatches++;
-                
-                // Highlight all matching text in the card
-                highlightText(card, searchTerm);
-            } else {
-                card.style.display = 'none';
-                card.style.backgroundColor = '';
+        // Search through index
+        this.searchIndex.forEach((item, idx) => {
+            if (item.fullText.toLowerCase().includes(searchTermLower)) {
+                matches.push({
+                    index: idx,
+                    ...item,
+                    matchPosition: item.fullText.toLowerCase().indexOf(searchTermLower)
+                });
             }
         });
         
-        // Also search and highlight in other page content (headers, paragraphs, etc)
-        const allElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, a, .featured-content, .portfolio-card');
-        
-        allElements.forEach(element => {
-            // Skip if element is inside a pick card (already handled)
-            if (!element.closest('.pick-card')) {
-                const text = element.textContent.toLowerCase();
-                if (text.includes(searchTermLower)) {
-                    highlightText(element, searchTerm);
-                    
-                    // Get section name
-                    const section = element.closest('section');
-                    if (section) {
-                        const sectionTitle = section.querySelector('h2');
-                        const sectionName = sectionTitle ? sectionTitle.textContent : 'Content Section';
-                        if (!sections.includes(sectionName)) {
-                            sections.push(sectionName);
-                        }
-                    }
-                    otherMatches++;
+        // Highlight matches and collect results
+        if (matches.length > 0) {
+            matches.forEach(match => {
+                this.highlightText(match.element, searchTerm);
+                if (match.type === 'project') {
+                    match.element.style.backgroundColor = 'rgba(128, 0, 32, 0.08)';
                 }
-            }
-        });
-        
-        // Display search results summary
-        if (searchResultsPanel && (cardMatches > 0 || otherMatches > 0)) {
-            const totalMatches = cardMatches + otherMatches;
-            let resultHTML = `<div class="search-results-summary">
-                <strong>${totalMatches} result${totalMatches !== 1 ? 's' : ''} found</strong>`;
+            });
             
-            if (cardMatches > 0) {
-                resultHTML += `<div class="result-type"><i class="fas fa-project-diagram"></i> ${cardMatches} project${cardMatches !== 1 ? 's' : ''}</div>`;
-            }
-            
-            if (sections.length > 0) {
-                resultHTML += `<div class="result-type"><i class="fas fa-file-alt"></i> ${sections.join(', ')}</div>`;
-            }
-            
-            resultHTML += '</div>';
-            searchResultsPanel.innerHTML = resultHTML;
-            searchResultsPanel.style.display = 'block';
-        } else if (searchResultsPanel) {
-            searchResultsPanel.innerHTML = '<div class="search-results-summary"><small>No results found</small></div>';
-            searchResultsPanel.style.display = 'block';
+            this.displaySearchResults(matches, searchTerm);
+        } else {
+            this.displaySearchResults([], searchTerm);
         }
         
-        // Scroll to first highlighted match
-        const firstHighlighted = document.querySelector('mark.search-highlight');
-        if (firstHighlighted) {
-            const yOffset = -100;
-            const y = firstHighlighted.getBoundingClientRect().top + window.scrollY + yOffset;
-            window.scrollTo({ top: y, behavior: 'smooth' });
+        // Scroll to first match
+        if (matches.length > 0) {
+            setTimeout(() => {
+                const firstMatch = matches[0].element;
+                firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
         }
     }
     
-    searchInput.addEventListener('input', () => {
-        performSearch();
-    });
+    displaySearchResults(matches, searchTerm) {
+        if (!this.searchResultsPanel) return;
+        
+        if (matches.length === 0) {
+            this.searchResultsPanel.innerHTML = `
+                <div class="search-no-results">
+                    <i class="fas fa-search"></i>
+                    <p>No results found for "<strong>${this.escapeHtml(searchTerm)}</strong>"</p>
+                    <small>Try different keywords or check spelling</small>
+                </div>
+            `;
+            this.searchResultsPanel.style.display = 'block';
+            return;
+        }
+        
+        // Group results by section
+        const grouped = {};
+        matches.forEach(match => {
+            const sectionName = match.sectionTitle || this.getSectionName(match.section);
+            if (!grouped[sectionName]) {
+                grouped[sectionName] = [];
+            }
+            grouped[sectionName].push(match);
+        });
+        
+        let html = `
+            <div class="search-header">
+                <strong>${matches.length} result${matches.length !== 1 ? 's' : ''} found</strong>
+                <span class="search-term">"${this.escapeHtml(searchTerm)}"</span>
+            </div>
+            <div class="search-results-list">
+        `;
+        
+        Object.entries(grouped).forEach(([sectionName, results]) => {
+            html += `<div class="search-section">
+                <h4 class="search-section-title">${sectionName}</h4>`;
+            
+            results.slice(0, 5).forEach((result, idx) => {
+                const preview = this.getPreview(result.fullText, searchTerm);
+                html += `
+                    <div class="search-result-item" data-index="${result.index}">
+                        <div class="result-location">
+                            <i class="fas fa-${this.getIcon(result.type)}"></i>
+                            <span class="result-type">${result.type}</span>
+                        </div>
+                        <div class="result-content">
+                            <p class="result-preview">${preview}</p>
+                        </div>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                `;
+            });
+            
+            if (results.length > 5) {
+                html += `<div class="search-more">+${results.length - 5} more in ${sectionName}</div>`;
+            }
+            
+            html += '</div>';
+        });
+        
+        html += '</div>';
+        this.searchResultsPanel.innerHTML = html;
+        this.searchResultsPanel.style.display = 'block';
+        
+        // Add click handlers for navigation
+        this.searchResultsPanel.querySelectorAll('.search-result-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const index = parseInt(item.dataset.index);
+                const match = this.searchIndex[index];
+                if (match && match.element) {
+                    match.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    match.element.style.backgroundColor = 'rgba(255, 215, 0, 0.2)';
+                    setTimeout(() => {
+                        match.element.style.backgroundColor = '';
+                    }, 2000);
+                }
+            });
+        });
+    }
     
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            const firstHighlighted = document.querySelector('mark.search-highlight');
-            if (firstHighlighted) {
-                firstHighlighted.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    getPreview(text, searchTerm) {
+        const idx = text.toLowerCase().indexOf(searchTerm.toLowerCase());
+        if (idx === -1) return text.substring(0, 60) + '...';
+        
+        const start = Math.max(0, idx - 30);
+        const end = Math.min(text.length, idx + searchTerm.length + 30);
+        const preview = text.substring(start, end);
+        
+        const term = text.substring(idx, idx + searchTerm.length);
+        const highlighted = preview.replace(
+            new RegExp(`(${term})`, 'gi'),
+            '<mark>$1</mark>'
+        );
+        
+        return (start > 0 ? '...' : '') + highlighted + (end < text.length ? '...' : '');
+    }
+    
+    getSectionName(sectionId) {
+        const sectionMap = {
+            'home': '🏠 Home',
+            'portfolio': '📂 Portfolio',
+            'podcast': '🎙️ Podcast',
+            'video': '🎬 Video',
+            'music': '🎵 Music',
+            'performance': '🎭 Performance',
+            'party': '🎉 Party',
+            'conference': '👥 Conference',
+            'projects': '📋 Projects',
+            'workflows': '⚙️ Workflows',
+            'analytics': '📊 Analytics',
+            'general': '📄 General'
+        };
+        return sectionMap[sectionId] || sectionId;
+    }
+    
+    getIcon(type) {
+        const icons = {
+            'project': 'layer-group',
+            'featured': 'star',
+            'heading': 'heading',
+            'text': 'align-left',
+            'link': 'link',
+            'content': 'file-alt'
+        };
+        return icons[type] || 'file';
+    }
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    attachEventListeners() {
+        this.searchInput.addEventListener('input', (e) => {
+            clearTimeout(this.debounceTimer);
+            
+            this.selectedSuggestionIndex = -1;
+            const query = e.target.value.trim();
+            
+            if (query === '') {
+                this.displaySuggestions(this.getSuggestions(''));
+            } else {
+                this.debounceTimer = setTimeout(() => {
+                    const suggestions = this.getSuggestions(query);
+                    this.displaySuggestions(suggestions);
+                }, 200);
+            }
+        });
+        
+        this.searchInput.addEventListener('keydown', (e) => {
+            if (!this.searchResultsPanel || this.searchResultsPanel.style.display === 'none') return;
+            
+            const items = this.searchResultsPanel.querySelectorAll('.suggestion-item');
+            
+            switch (e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    this.selectedSuggestionIndex = Math.min(this.selectedSuggestionIndex + 1, items.length - 1);
+                    this.updateSuggestionHighlight(items);
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    this.selectedSuggestionIndex = Math.max(this.selectedSuggestionIndex - 1, -1);
+                    this.updateSuggestionHighlight(items);
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    if (this.selectedSuggestionIndex >= 0) {
+                        const suggestions = this.getSuggestions(this.searchInput.value.trim());
+                        this.selectSuggestion(this.selectedSuggestionIndex, suggestions);
+                    } else {
+                        this.performSearch();
+                    }
+                    this.searchResultsPanel.style.display = 'none';
+                    break;
+                case 'Escape':
+                    this.searchResultsPanel.style.display = 'none';
+                    break;
+            }
+        });
+        
+        this.searchInput.addEventListener('focus', () => {
+            const query = this.searchInput.value.trim();
+            const suggestions = this.getSuggestions(query);
+            if (suggestions.length > 0) {
+                this.displaySuggestions(suggestions);
+            }
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.header-center')) {
+                if (this.searchResultsPanel) {
+                    this.searchResultsPanel.style.display = 'none';
+                }
+            }
+        });
+    }
+    
+    updateSuggestionHighlight(items) {
+        items.forEach((item, idx) => {
+            item.classList.toggle('active', idx === this.selectedSuggestionIndex);
+        });
+    }
+}
+
+// Initialize smart search on page load
+function initSearchBar() {
+    const smartSearch = new SmartSearch();
+    
+    // Keyboard shortcut: Cmd+K (Mac) or Ctrl+K (Windows/Linux) to focus search
+    document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+            e.preventDefault();
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.focus();
+                searchInput.select();
+            }
+        }
+        
+        // Alternative: '/' key to focus search (if not in input)
+        if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+            e.preventDefault();
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.focus();
             }
         }
     });
+    
+    // Ensure search bar stays accessible when mobile keyboard appears
+    if (/Android|iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        window.addEventListener('focusin', () => {
+            const searchInput = document.getElementById('searchInput');
+            if (document.activeElement === searchInput) {
+                setTimeout(() => {
+                    searchInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 300);
+            }
+        });
+    }
 }
 
 // Sidebar Toggle
@@ -152,15 +499,12 @@ const sidebarToggle = document.getElementById('sidebarToggle');
 const sidebar = document.getElementById('sidebar');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
 const closeSidebar = document.getElementById('closeSidebar');
-const mainContent = document.querySelector('.main-content');
-const footer = document.querySelector('.footer');
 
 if (sidebarToggle) {
     sidebarToggle.addEventListener('click', () => {
         sidebar.classList.toggle('active');
         sidebarOverlay.classList.toggle('active');
-        mainContent.classList.toggle('sidebar-open');
-        footer.classList.toggle('sidebar-open');
+        document.body.classList.toggle('sidebar-open');
     });
 }
 
@@ -168,8 +512,7 @@ if (closeSidebar) {
     closeSidebar.addEventListener('click', () => {
         sidebar.classList.remove('active');
         sidebarOverlay.classList.remove('active');
-        mainContent.classList.remove('sidebar-open');
-        footer.classList.remove('sidebar-open');
+        document.body.classList.remove('sidebar-open');
     });
 }
 
@@ -177,8 +520,7 @@ if (sidebarOverlay) {
     sidebarOverlay.addEventListener('click', () => {
         sidebar.classList.remove('active');
         sidebarOverlay.classList.remove('active');
-        mainContent.classList.remove('sidebar-open');
-        footer.classList.remove('sidebar-open');
+        document.body.classList.remove('sidebar-open');
     });
 }
 
@@ -268,8 +610,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             if (window.innerWidth <= 768) {
                 sidebar.classList.remove('active');
                 sidebarOverlay.classList.remove('active');
-                mainContent.classList.remove('sidebar-open');
-                footer.classList.remove('sidebar-open');
+                document.body.classList.remove('sidebar-open');
             }
         }
     });
