@@ -1,4 +1,714 @@
-// Smart Search Bar Functionality
+// Language Localization
+function getPreferredLanguage() {
+    const locale = (navigator.languages && navigator.languages[0]) || navigator.language || 'en';
+    const lower = locale.toLowerCase();
+    console.log('Browser locale:', locale, '→ Detected language:', lower.startsWith('zh') ? 'zh' : lower.startsWith('es') ? 'es' : 'en');
+
+    if (lower.startsWith('zh')) return 'zh';
+    if (lower.startsWith('es')) return 'es';
+    return 'en';
+}
+
+function getTranslations() {
+    return {
+        en: {
+            htmlLang: 'en',
+            pageTitle: 'OPTMO - AI-Powered Content & Event Automation | Start Free Trial',
+            metaDescription: 'OPTMO automates podcast, video, music, and event workflows with AI-powered tools. Save 90% of production time with intelligent automation. Start free today.',
+            account: 'Account',
+            menuMain: 'MAIN',
+            menuCreation: 'CONTENT CREATION',
+            menuEvents: 'EVENT ORGANIZATION',
+            menuTools: 'TOOLS',
+            home: 'Home',
+            portfolio: 'Portfolio',
+            trending: 'Trending',
+            podcast: 'Podcast Automation',
+            video: 'Video Production',
+            music: 'Music Creation',
+            performances: 'Performances',
+            parties: 'Parties',
+            conferences: 'Conferences',
+            projects: 'My Projects',
+            workflows: 'Workflows',
+            analytics: 'Analytics',
+            heroTitle: 'Automate Your Content & Events',
+            heroSubtitle: 'AI-powered workflows for podcasts, videos, music, and events - Save 90% of production time and focus on what matters',
+            startTrial: 'Start Free Trial',
+            contactSales: 'Contact Sales',
+            contactInfoTitle: 'Contact Information',
+            emailLabel: 'Email:',
+            phoneLabel: 'Phone:',
+            contactUs: 'Contact Us',
+            yourName: 'Your Name *',
+            emailAddress: 'Email Address *',
+            message: 'Message *',
+            sendMessage: 'Send Message',
+            formNote: 'This form is powered by Formspree.',
+            searchPlaceholder: 'Search...',
+            searchTitle: 'Press Ctrl+K or Cmd+K to search',
+            searchSuggestions: ['Podcast Automation', 'Video Production', 'Music Creation', 'Event Management', 'Analytics', 'Workflows', 'Projects', 'Pricing'],
+            dropdownLogin: 'Login',
+            dropdownMyAccount: 'My Account',
+            dropdownUpgrade: 'Upgrade to Pro',
+            dropdownSupport: 'Support OPTMO',
+            dropdownLogout: 'Logout',
+            premiumTitle: 'Pro Membership',
+            premiumDesc: 'Unlock full automation & AI-powered workflows',
+            premiumBtn: 'Upgrade to Pro',
+            devTitle: 'Site Under Development',
+            devText: 'This website is still being developed. Some features may change or be unavailable. Not all content is finalized or accurate yet. Thank you for your patience!',
+            automationTitle: 'How Automation Works',
+            automationAuthor: 'AI-Powered',
+            automationDate: 'Instant Results',
+            automationHeading: 'Complete Workflows in Minutes, Not Days',
+            automationDesc: 'OPTMO\'s intelligent automation handles everything from script generation and video editing to event scheduling and vendor coordination. Simply input your requirements, and our AI creates a complete workflow tailored to your needs. Pro members get access to advanced features including multi-platform distribution, real-time analytics, and priority processing.',
+            automationCta: 'See Plans & Pricing →',
+            servicesTitle: 'Our Services',
+            serviceBadgePodcast: 'Podcast',
+            serviceBadgeVideo: 'Video',
+            serviceBadgeMusic: 'Music',
+            serviceBadgeEvents: 'Events',
+            serviceBadgeWorkflows: 'Workflows',
+            serviceBadgeAnalytics: 'Analytics',
+            serviceSummaryPodcast: 'Streamline your podcast workflow with AI-powered editing, intro/outro generation, and multi-platform distribution.',
+            serviceSummaryVideo: 'Automate video creation with script generation, voiceover, editing, and optimization for multiple platforms.',
+            serviceSummaryMusic: 'AI-powered music composition tailored to your brand, mood, and licensing requirements.',
+            serviceSummaryEvents: 'Automate event planning with venue coordination, vendor management, and guest handling.',
+            serviceSummaryWorkflows: 'Create tailored automation workflows that fit your specific content creation or event management needs.',
+            serviceSummaryAnalytics: 'Track and analyze your content performance with real-time insights and data-driven recommendations.',
+            serviceTitle1: 'Podcast Automation',
+            serviceTitle2: 'Video Production',
+            serviceTitle3: 'Music Creation',
+            serviceTitle4: 'Event Organization',
+            serviceTitle5: 'Custom Workflows',
+            serviceTitle6: 'Performance Analytics',
+            plansTitle: 'Membership Plans',
+            planRecommended: 'RECOMMENDED',
+            planFreeName: 'Free Account',
+            planProName: 'Pro Membership',
+            planEnterpriseName: 'Enterprise',
+            planCustom: 'Custom',
+            monthLabel: '/month',
+            freeFeature1: 'Manual project creation',
+            freeFeature2: 'Basic templates',
+            freeFeature3: '3 projects per month',
+            freeFeature4: 'Community support',
+            freeFeature5: 'AI automation',
+            freeFeature6: 'Priority processing',
+            freeBtn: 'Sign Up Free',
+            proFeature1: 'Full AI automation',
+            proFeature2: 'Unlimited projects',
+            proFeature3: 'Advanced workflows',
+            proFeature4: 'Priority processing',
+            proFeature5: 'Multi-platform distribution',
+            proFeature6: 'Real-time analytics',
+            proFeature7: 'Dedicated support',
+            proBtn: 'Upgrade to Pro',
+            enterpriseFeature1: 'Everything in Pro',
+            enterpriseFeature2: 'Custom integrations',
+            enterpriseFeature3: 'Dedicated account manager',
+            enterpriseFeature4: 'SLA guarantees',
+            enterpriseFeature5: 'Team collaboration',
+            enterpriseFeature6: 'White-label options',
+            aboutTitle: 'About Us',
+            founderTitle: 'Founder',
+            founderText: 'OPTMO was founded by <strong><a href="https://fredykraft.github.io/Chirui" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong>, a researcher in Operations, Information, and Technology. With a focus on practical automation solutions, Chirui created OPTMO to help creators and organizers streamline their workflows through intelligent tools.',
+            visionTitle: 'Our Vision',
+            visionHeading: 'What We\'re Building',
+            visionText1: 'OPTMO is in active development as we build the future of content and event automation. Our goal is to help creators and organizers save time on repetitive tasks so they can focus on creativity and strategy. We\'re currently working on AI-powered tools for podcast production, video editing, music creation, and event management.',
+            visionText2: '<strong>Interested in being an early adopter?</strong> <a href="#contact" style="color: var(--primary-color); text-decoration: underline;">Get in touch</a> to learn more about our beta program and founder pricing.',
+            contactSectionTitle: 'Get Started Today',
+            footerTagline: 'AI-powered automation for content creation and event organization. Save time, create more.',
+            footerServices: 'Services',
+            footerCompany: 'Company',
+            footerResources: 'Resources',
+            footerService1: 'Podcast Creation',
+            footerService2: 'Video Production',
+            footerService3: 'Music Creation',
+            footerService4: 'Event Organization',
+            footerCompany1: 'Pricing',
+            footerCompany2: 'About Us',
+            footerCompany3: 'Projects',
+            footerCompany4: 'Get Started',
+            footerCompany5: 'Support OPTMO',
+            footerResource1: 'Help Center',
+            footerResource2: 'Documentation',
+            footerResource3: 'API Access',
+            footerResource4: 'System Status',
+            footerBottom: '&copy; 2026 OPTMO. All rights reserved. | <a href="#home">Privacy Policy</a> | <a href="#home">Terms of Service</a> | <a href="#home">Cookie Policy</a>',
+            cookieTitle: 'Cookie Notice',
+            cookieText: 'OPTMO uses essential cookies to operate this website. You may also consent to optional analytics cookies.',
+            cookiePolicy: 'Privacy Policy',
+            cookieEssential: 'Essential Only',
+            cookieAccept: 'Accept Analytics',
+            noSuggestions: 'No suggestions found',
+            noResultsFor: 'No results found for',
+            tryDifferent: 'Try different keywords or check spelling',
+            occurrences: 'occurrences',
+            occurrence: 'occurrence',
+            prevResult: 'Previous result (Shift+Enter)',
+            nextResult: 'Next result (Enter)',
+            matches: 'matches',
+            match: 'match',
+            moreIn: 'more in',
+            pageContent: 'Page Content',
+            sectionHome: '🏠 Home',
+            sectionPortfolio: '📂 Portfolio',
+            sectionPodcast: '🎙️ Podcast',
+            sectionVideo: '🎬 Video',
+            sectionMusic: '🎵 Music',
+            sectionPerformance: '🎭 Performance',
+            sectionParty: '🎉 Party',
+            sectionConference: '👥 Conference',
+            sectionProjects: '📋 Projects',
+            sectionWorkflows: '⚙️ Workflows',
+            sectionAnalytics: '📊 Analytics',
+            sectionGeneral: '📄 General',
+            recent: '🕒 Recent',
+            featureLabel: 'Feature'
+        },
+        zh: {
+            htmlLang: 'zh-CN',
+            pageTitle: 'OPTMO - AI内容与活动自动化平台 | 免费试用',
+            metaDescription: 'OPTMO 使用 AI 自动化播客、视频、音乐与活动工作流。节省 90% 制作时间，立即免费开始。',
+            account: '账户',
+            menuMain: '主菜单',
+            menuCreation: '内容创作',
+            menuEvents: '活动组织',
+            menuTools: '工具',
+            home: '首页',
+            portfolio: '作品集',
+            trending: '热门',
+            podcast: '播客自动化',
+            video: '视频制作',
+            music: '音乐创作',
+            performances: '演出',
+            parties: '派对',
+            conferences: '会议',
+            projects: '我的项目',
+            workflows: '工作流',
+            analytics: '数据分析',
+            heroTitle: '自动化你的内容与活动',
+            heroSubtitle: 'AI 驱动的播客、视频、音乐和活动工作流——节省 90% 制作时间，专注真正重要的事情',
+            startTrial: '免费试用',
+            contactSales: '联系销售',
+            contactInfoTitle: '联系方式',
+            emailLabel: '邮箱：',
+            phoneLabel: '电话：',
+            contactUs: '联系我们',
+            yourName: '你的姓名 *',
+            emailAddress: '邮箱地址 *',
+            message: '留言 *',
+            sendMessage: '发送消息',
+            formNote: '此表单由 Formspree 提供支持。',
+            searchPlaceholder: '搜索...',
+            searchTitle: '按 Ctrl+K 或 Cmd+K 搜索',
+            searchSuggestions: ['播客自动化', '视频制作', '音乐创作', '活动管理', '数据分析', '工作流', '项目', '定价'],
+            dropdownLogin: '登录',
+            dropdownMyAccount: '我的账户',
+            dropdownUpgrade: '升级到专业版',
+            dropdownSupport: '支持 OPTMO',
+            dropdownLogout: '退出登录',
+            premiumTitle: '专业会员',
+            premiumDesc: '解锁完整自动化与 AI 工作流',
+            premiumBtn: '升级到专业版',
+            devTitle: '网站开发中',
+            devText: '本网站仍在开发中。部分功能可能会调整或暂不可用。并非所有内容都已最终确认或完全准确。感谢您的耐心！',
+            automationTitle: '自动化如何工作',
+            automationAuthor: 'AI 驱动',
+            automationDate: '即时结果',
+            automationHeading: '几分钟完成整套流程，而不是几天',
+            automationDesc: 'OPTMO 的智能自动化可处理从脚本生成、视频编辑到活动排程与供应商协调的全流程。只需输入需求，AI 即可生成适配你的完整工作流。专业会员可使用高级功能，包括多平台分发、实时分析与优先处理。',
+            automationCta: '查看方案与价格 →',
+            servicesTitle: '我们的服务',
+            serviceBadgePodcast: '播客',
+            serviceBadgeVideo: '视频',
+            serviceBadgeMusic: '音乐',
+            serviceBadgeEvents: '活动',
+            serviceBadgeWorkflows: '工作流',
+            serviceBadgeAnalytics: '分析',
+            serviceSummaryPodcast: '通过 AI 编辑、片头片尾生成与多平台发布，简化播客工作流程。',
+            serviceSummaryVideo: '自动完成脚本生成、配音、剪辑与多平台优化。',
+            serviceSummaryMusic: '根据品牌、风格与授权需求，生成 AI 音乐内容。',
+            serviceSummaryEvents: '通过场地协调、供应商管理与来宾管理自动化活动筹备。',
+            serviceSummaryWorkflows: '为内容创作或活动管理构建贴合业务的定制自动化流程。',
+            serviceSummaryAnalytics: '通过实时洞察和数据建议，跟踪并分析内容表现。',
+            serviceTitle1: '播客自动化',
+            serviceTitle2: '视频制作',
+            serviceTitle3: '音乐创作',
+            serviceTitle4: '活动组织',
+            serviceTitle5: '定制工作流',
+            serviceTitle6: '绩效分析',
+            plansTitle: '会员方案',
+            planRecommended: '推荐',
+            planFreeName: '免费账户',
+            planProName: '专业会员',
+            planEnterpriseName: '企业版',
+            planCustom: '定制',
+            monthLabel: '/月',
+            freeFeature1: '手动创建项目',
+            freeFeature2: '基础模板',
+            freeFeature3: '每月 3 个项目',
+            freeFeature4: '社区支持',
+            freeFeature5: 'AI 自动化',
+            freeFeature6: '优先处理',
+            freeBtn: '免费注册',
+            proFeature1: '完整 AI 自动化',
+            proFeature2: '无限项目',
+            proFeature3: '高级工作流',
+            proFeature4: '优先处理',
+            proFeature5: '多平台分发',
+            proFeature6: '实时分析',
+            proFeature7: '专属支持',
+            proBtn: '升级到专业版',
+            enterpriseFeature1: '包含专业版全部功能',
+            enterpriseFeature2: '定制集成',
+            enterpriseFeature3: '专属客户经理',
+            enterpriseFeature4: 'SLA 服务保障',
+            enterpriseFeature5: '团队协作',
+            enterpriseFeature6: '白标方案',
+            aboutTitle: '关于我们',
+            founderTitle: '创始人',
+            founderText: 'OPTMO 由 <strong><a href="https://fredykraft.github.io/Chirui" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong> 创立，他是一位研究运营、信息与技术的学者。Chirui 专注于实用型自动化方案，创建 OPTMO 旨在帮助创作者与组织者通过智能工具优化工作流程。',
+            visionTitle: '我们的愿景',
+            visionHeading: '我们正在构建什么',
+            visionText1: 'OPTMO 正在积极开发中，致力于构建内容与活动自动化的未来。我们的目标是帮助创作者和组织者节省重复性工作的时间，把精力投入到创意与策略中。我们正在推进播客制作、视频编辑、音乐创作与活动管理的 AI 工具。',
+            visionText2: '<strong>想成为早期用户吗？</strong> <a href="#contact" style="color: var(--primary-color); text-decoration: underline;">联系我们</a>，了解测试计划与创始人优惠。',
+            contactSectionTitle: '立即开始',
+            footerTagline: '面向内容创作与活动组织的 AI 自动化。节省时间，创造更多。',
+            footerServices: '服务',
+            footerCompany: '公司',
+            footerResources: '资源',
+            footerService1: '播客制作',
+            footerService2: '视频制作',
+            footerService3: '音乐创作',
+            footerService4: '活动组织',
+            footerCompany1: '价格',
+            footerCompany2: '关于我们',
+            footerCompany3: '项目',
+            footerCompany4: '开始使用',
+            footerCompany5: '支持 OPTMO',
+            footerResource1: '帮助中心',
+            footerResource2: '文档',
+            footerResource3: 'API 访问',
+            footerResource4: '系统状态',
+            footerBottom: '&copy; 2026 OPTMO。保留所有权利。 | <a href="#home">隐私政策</a> | <a href="#home">服务条款</a> | <a href="#home">Cookie 政策</a>',
+            cookieTitle: 'Cookie 通知',
+            cookieText: 'OPTMO 使用必要 Cookie 以保证网站运行。您也可以同意启用可选的分析 Cookie。',
+            cookiePolicy: '隐私政策',
+            cookieEssential: '仅必要 Cookie',
+            cookieAccept: '接受分析 Cookie',
+            noSuggestions: '未找到建议',
+            noResultsFor: '未找到与以下内容相关的结果',
+            tryDifferent: '请尝试其他关键词或检查拼写',
+            occurrences: '处匹配',
+            occurrence: '处匹配',
+            prevResult: '上一个结果 (Shift+Enter)',
+            nextResult: '下一个结果 (Enter)',
+            matches: '处匹配',
+            match: '处匹配',
+            moreIn: '更多结果位于',
+            pageContent: '页面内容',
+            sectionHome: '🏠 首页',
+            sectionPortfolio: '📂 作品集',
+            sectionPodcast: '🎙️ 播客',
+            sectionVideo: '🎬 视频',
+            sectionMusic: '🎵 音乐',
+            sectionPerformance: '🎭 演出',
+            sectionParty: '🎉 派对',
+            sectionConference: '👥 会议',
+            sectionProjects: '📋 项目',
+            sectionWorkflows: '⚙️ 工作流',
+            sectionAnalytics: '📊 分析',
+            sectionGeneral: '📄 通用',
+            recent: '🕒 最近',
+            featureLabel: '功能'
+        },
+        es: {
+            htmlLang: 'es',
+            pageTitle: 'OPTMO - Automatización de Contenido y Eventos con IA | Prueba Gratis',
+            metaDescription: 'OPTMO automatiza flujos de trabajo de podcast, video, música y eventos con IA. Ahorra 90% del tiempo de producción.',
+            account: 'Cuenta',
+            menuMain: 'PRINCIPAL',
+            menuCreation: 'CREACIÓN DE CONTENIDO',
+            menuEvents: 'ORGANIZACIÓN DE EVENTOS',
+            menuTools: 'HERRAMIENTAS',
+            home: 'Inicio',
+            portfolio: 'Portafolio',
+            trending: 'Tendencias',
+            podcast: 'Automatización de Podcast',
+            video: 'Producción de Video',
+            music: 'Creación Musical',
+            performances: 'Presentaciones',
+            parties: 'Fiestas',
+            conferences: 'Conferencias',
+            projects: 'Mis Proyectos',
+            workflows: 'Flujos de Trabajo',
+            analytics: 'Analíticas',
+            heroTitle: 'Automatiza Tu Contenido y Eventos',
+            heroSubtitle: 'Flujos de trabajo con IA para podcasts, videos, música y eventos. Ahorra 90% del tiempo de producción.',
+            startTrial: 'Comenzar Prueba Gratis',
+            contactSales: 'Contactar Ventas',
+            contactInfoTitle: 'Información de Contacto',
+            emailLabel: 'Correo:',
+            phoneLabel: 'Teléfono:',
+            contactUs: 'Contáctanos',
+            yourName: 'Tu Nombre *',
+            emailAddress: 'Correo Electrónico *',
+            message: 'Mensaje *',
+            sendMessage: 'Enviar Mensaje',
+            formNote: 'Este formulario funciona con Formspree.',
+            searchPlaceholder: 'Buscar...',
+            searchTitle: 'Presiona Ctrl+K o Cmd+K para buscar',
+            searchSuggestions: ['Automatización de Podcast', 'Producción de Video', 'Creación Musical', 'Gestión de Eventos', 'Analíticas', 'Flujos de Trabajo', 'Proyectos', 'Precios'],
+            dropdownLogin: 'Iniciar sesión',
+            dropdownMyAccount: 'Mi cuenta',
+            dropdownUpgrade: 'Actualizar a Pro',
+            dropdownSupport: 'Apoyar OPTMO',
+            dropdownLogout: 'Cerrar sesión',
+            premiumTitle: 'Membresía Pro',
+            premiumDesc: 'Desbloquea automatización completa y flujos con IA',
+            premiumBtn: 'Actualizar a Pro',
+            devTitle: 'Sitio en desarrollo',
+            devText: 'Este sitio web aún está en desarrollo. Algunas funciones pueden cambiar o no estar disponibles. No todo el contenido está finalizado o es completamente preciso. ¡Gracias por tu paciencia!',
+            automationTitle: 'Cómo funciona la automatización',
+            automationAuthor: 'Impulsado por IA',
+            automationDate: 'Resultados instantáneos',
+            automationHeading: 'Completa flujos en minutos, no en días',
+            automationDesc: 'La automatización inteligente de OPTMO gestiona todo: generación de guiones, edición de video, programación de eventos y coordinación de proveedores. Solo ingresa tus requisitos y nuestra IA crea un flujo completo adaptado a tus necesidades. Los miembros Pro obtienen funciones avanzadas como distribución multiplataforma, analíticas en tiempo real y procesamiento prioritario.',
+            automationCta: 'Ver planes y precios →',
+            servicesTitle: 'Nuestros servicios',
+            serviceBadgePodcast: 'Podcast',
+            serviceBadgeVideo: 'Video',
+            serviceBadgeMusic: 'Música',
+            serviceBadgeEvents: 'Eventos',
+            serviceBadgeWorkflows: 'Flujos',
+            serviceBadgeAnalytics: 'Analíticas',
+            serviceSummaryPodcast: 'Optimiza tu flujo de podcast con edición con IA, generación de intro/outro y distribución multiplataforma.',
+            serviceSummaryVideo: 'Automatiza la creación de video con guion, voz en off, edición y optimización para múltiples plataformas.',
+            serviceSummaryMusic: 'Composición musical con IA adaptada a tu marca, estilo y requisitos de licencia.',
+            serviceSummaryEvents: 'Automatiza la planificación de eventos con coordinación de sedes, gestión de proveedores y asistentes.',
+            serviceSummaryWorkflows: 'Crea flujos de automatización a medida para tus necesidades de contenido o gestión de eventos.',
+            serviceSummaryAnalytics: 'Supervisa y analiza el rendimiento de tu contenido con información en tiempo real y recomendaciones basadas en datos.',
+            serviceTitle1: 'Automatización de Podcast',
+            serviceTitle2: 'Producción de Video',
+            serviceTitle3: 'Creación Musical',
+            serviceTitle4: 'Organización de Eventos',
+            serviceTitle5: 'Flujos Personalizados',
+            serviceTitle6: 'Analíticas de Rendimiento',
+            plansTitle: 'Planes de membresía',
+            planRecommended: 'RECOMENDADO',
+            planFreeName: 'Cuenta gratuita',
+            planProName: 'Membresía Pro',
+            planEnterpriseName: 'Empresarial',
+            planCustom: 'Personalizado',
+            monthLabel: '/mes',
+            freeFeature1: 'Creación manual de proyectos',
+            freeFeature2: 'Plantillas básicas',
+            freeFeature3: '3 proyectos por mes',
+            freeFeature4: 'Soporte de la comunidad',
+            freeFeature5: 'Automatización con IA',
+            freeFeature6: 'Procesamiento prioritario',
+            freeBtn: 'Regístrate gratis',
+            proFeature1: 'Automatización total con IA',
+            proFeature2: 'Proyectos ilimitados',
+            proFeature3: 'Flujos avanzados',
+            proFeature4: 'Procesamiento prioritario',
+            proFeature5: 'Distribución multiplataforma',
+            proFeature6: 'Analíticas en tiempo real',
+            proFeature7: 'Soporte dedicado',
+            proBtn: 'Actualizar a Pro',
+            enterpriseFeature1: 'Todo lo de Pro',
+            enterpriseFeature2: 'Integraciones personalizadas',
+            enterpriseFeature3: 'Gestor de cuenta dedicado',
+            enterpriseFeature4: 'Garantías SLA',
+            enterpriseFeature5: 'Colaboración de equipo',
+            enterpriseFeature6: 'Opciones de marca blanca',
+            aboutTitle: 'Sobre nosotros',
+            founderTitle: 'Fundador',
+            founderText: 'OPTMO fue fundada por <strong><a href="https://fredykraft.github.io/Chirui" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong>, investigador en Operaciones, Información y Tecnología. Con foco en soluciones prácticas de automatización, Chirui creó OPTMO para ayudar a creadores y organizadores a optimizar sus flujos con herramientas inteligentes.',
+            visionTitle: 'Nuestra visión',
+            visionHeading: 'Qué estamos construyendo',
+            visionText1: 'OPTMO está en desarrollo activo mientras construimos el futuro de la automatización de contenido y eventos. Nuestro objetivo es ayudar a creadores y organizadores a ahorrar tiempo en tareas repetitivas para enfocarse en creatividad y estrategia. Actualmente trabajamos en herramientas con IA para podcast, video, música y gestión de eventos.',
+            visionText2: '<strong>¿Te interesa ser adopción temprana?</strong> <a href="#contact" style="color: var(--primary-color); text-decoration: underline;">Contáctanos</a> para conocer nuestro programa beta y precios para fundadores.',
+            contactSectionTitle: 'Comienza hoy',
+            footerTagline: 'Automatización con IA para creación de contenido y organización de eventos. Ahorra tiempo, crea más.',
+            footerServices: 'Servicios',
+            footerCompany: 'Empresa',
+            footerResources: 'Recursos',
+            footerService1: 'Creación de podcast',
+            footerService2: 'Producción de video',
+            footerService3: 'Creación musical',
+            footerService4: 'Organización de eventos',
+            footerCompany1: 'Precios',
+            footerCompany2: 'Sobre nosotros',
+            footerCompany3: 'Proyectos',
+            footerCompany4: 'Comenzar',
+            footerCompany5: 'Apoyar OPTMO',
+            footerResource1: 'Centro de ayuda',
+            footerResource2: 'Documentación',
+            footerResource3: 'Acceso API',
+            footerResource4: 'Estado del sistema',
+            footerBottom: '&copy; 2026 OPTMO. Todos los derechos reservados. | <a href="#home">Política de privacidad</a> | <a href="#home">Términos de servicio</a> | <a href="#home">Política de cookies</a>',
+            cookieTitle: 'Aviso de cookies',
+            cookieText: 'OPTMO utiliza cookies esenciales para operar este sitio web. También puedes consentir cookies analíticas opcionales.',
+            cookiePolicy: 'Política de privacidad',
+            cookieEssential: 'Solo esenciales',
+            cookieAccept: 'Aceptar analíticas',
+            noSuggestions: 'No se encontraron sugerencias',
+            noResultsFor: 'No se encontraron resultados para',
+            tryDifferent: 'Prueba otras palabras clave o revisa la ortografía',
+            occurrences: 'coincidencias',
+            occurrence: 'coincidencia',
+            prevResult: 'Resultado anterior (Shift+Enter)',
+            nextResult: 'Resultado siguiente (Enter)',
+            matches: 'coincidencias',
+            match: 'coincidencia',
+            moreIn: 'más en',
+            pageContent: 'Contenido de la página',
+            sectionHome: '🏠 Inicio',
+            sectionPortfolio: '📂 Portafolio',
+            sectionPodcast: '🎙️ Podcast',
+            sectionVideo: '🎬 Video',
+            sectionMusic: '🎵 Música',
+            sectionPerformance: '🎭 Presentación',
+            sectionParty: '🎉 Fiesta',
+            sectionConference: '👥 Conferencia',
+            sectionProjects: '📋 Proyectos',
+            sectionWorkflows: '⚙️ Flujos',
+            sectionAnalytics: '📊 Analíticas',
+            sectionGeneral: '📄 General',
+            recent: '🕒 Reciente',
+            featureLabel: 'Función'
+        }
+    };
+}
+
+function applySystemLanguage() {
+    const language = getPreferredLanguage();
+    const translations = getTranslations();
+    const t = translations[language] || translations.en;
+    console.log('Applying language:', language);
+
+    const setText = (selector, value) => {
+        const element = document.querySelector(selector);
+        if (element && value) {
+            element.textContent = value;
+        }
+    };
+
+    const setHTML = (selector, value) => {
+        const element = document.querySelector(selector);
+        if (element && value) {
+            element.innerHTML = value;
+        }
+    };
+
+    const setAttr = (selector, attr, value) => {
+        const element = document.querySelector(selector);
+        if (element && value) {
+            element.setAttribute(attr, value);
+        }
+    };
+
+    document.documentElement.setAttribute('lang', t.htmlLang);
+    document.title = t.pageTitle;
+    setAttr('meta[name="description"]', 'content', t.metaDescription);
+
+    setText('.account-btn span', t.account);
+    setAttr('#sidebarToggle', 'title', t.menuMain);
+    setAttr('#closeSidebar', 'title', t.menuMain);
+
+    const dropdownLinks = document.querySelectorAll('#dropdownMenu a');
+    if (dropdownLinks[0]) dropdownLinks[0].innerHTML = `<i class="fas fa-sign-in-alt"></i> ${t.dropdownLogin}`;
+    if (dropdownLinks[1]) dropdownLinks[1].innerHTML = `<i class="fas fa-user"></i> ${t.dropdownMyAccount}`;
+    if (dropdownLinks[2]) dropdownLinks[2].innerHTML = `<i class="fas fa-crown"></i> ${t.dropdownUpgrade}`;
+    if (dropdownLinks[3]) dropdownLinks[3].innerHTML = `<i class="fas fa-heart"></i> ${t.dropdownSupport}`;
+    if (dropdownLinks[4]) dropdownLinks[4].innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.dropdownLogout}`;
+
+    const navTitles = document.querySelectorAll('.nav-section-title');
+    if (navTitles[0]) navTitles[0].textContent = t.menuMain;
+    if (navTitles[1]) navTitles[1].textContent = t.menuCreation;
+    if (navTitles[2]) navTitles[2].textContent = t.menuEvents;
+    if (navTitles[3]) navTitles[3].textContent = t.menuTools;
+
+    const navItems = document.querySelectorAll('.sidebar-nav .nav-item span');
+    if (navItems[0]) navItems[0].textContent = t.home;
+    if (navItems[1]) navItems[1].textContent = t.portfolio;
+    if (navItems[2]) navItems[2].textContent = t.trending;
+    if (navItems[3]) navItems[3].textContent = t.podcast;
+    if (navItems[4]) navItems[4].textContent = t.video;
+    if (navItems[5]) navItems[5].textContent = t.music;
+    if (navItems[6]) navItems[6].textContent = t.performances;
+    if (navItems[7]) navItems[7].textContent = t.parties;
+    if (navItems[8]) navItems[8].textContent = t.conferences;
+    if (navItems[9]) navItems[9].textContent = t.projects;
+    if (navItems[10]) navItems[10].textContent = t.workflows;
+    if (navItems[11]) navItems[11].textContent = t.analytics;
+
+    const premiumTitle = document.querySelector('.premium-box h4');
+    if (premiumTitle) premiumTitle.innerHTML = `<i class="fas fa-crown"></i> ${t.premiumTitle}`;
+    setText('.premium-box p', t.premiumDesc);
+    setText('.premium-box .premium-btn', t.premiumBtn);
+
+    setText('.hero-content h1', t.heroTitle);
+    setText('.hero-content p', t.heroSubtitle);
+
+    const heroButtons = document.querySelectorAll('.hero-content .cta-button');
+    if (heroButtons[0]) heroButtons[0].textContent = t.startTrial;
+    if (heroButtons[1]) heroButtons[1].textContent = t.contactSales;
+
+    setText('.development-notice strong', t.devTitle);
+    setText('.development-notice p', t.devText);
+
+    const sectionTitles = document.querySelectorAll('.section-title');
+    if (sectionTitles[0]) sectionTitles[0].textContent = t.automationTitle;
+    if (sectionTitles[1]) sectionTitles[1].textContent = t.servicesTitle;
+    if (sectionTitles[2]) sectionTitles[2].textContent = t.plansTitle;
+    if (sectionTitles[3]) sectionTitles[3].textContent = t.aboutTitle;
+    if (sectionTitles[4]) sectionTitles[4].textContent = t.visionTitle;
+    if (sectionTitles[5]) sectionTitles[5].textContent = t.contactSectionTitle;
+
+    const articleMeta = document.querySelectorAll('.featured-content .article-meta span');
+    if (articleMeta[0]) articleMeta[0].innerHTML = `<i class="fas fa-robot"></i> ${t.automationAuthor}`;
+    if (articleMeta[1]) articleMeta[1].innerHTML = `<i class="fas fa-bolt"></i> ${t.automationDate}`;
+    setText('.featured-content h3', t.automationHeading);
+    setText('.featured-content p', t.automationDesc);
+    setText('.featured-content .read-more', t.automationCta);
+
+    const pickBadges = document.querySelectorAll('.pick-card .rating');
+    if (pickBadges[0]) pickBadges[0].textContent = t.serviceBadgePodcast;
+    if (pickBadges[1]) pickBadges[1].textContent = t.serviceBadgeVideo;
+    if (pickBadges[2]) pickBadges[2].textContent = t.serviceBadgeMusic;
+    if (pickBadges[3]) pickBadges[3].textContent = t.serviceBadgeEvents;
+    if (pickBadges[4]) pickBadges[4].textContent = t.serviceBadgeWorkflows;
+    if (pickBadges[5]) pickBadges[5].textContent = t.serviceBadgeAnalytics;
+
+    const pickTitles = document.querySelectorAll('.pick-card h4');
+    if (pickTitles[0]) pickTitles[0].textContent = t.serviceTitle1;
+    if (pickTitles[1]) pickTitles[1].textContent = t.serviceTitle2;
+    if (pickTitles[2]) pickTitles[2].textContent = t.serviceTitle3;
+    if (pickTitles[3]) pickTitles[3].textContent = t.serviceTitle4;
+    if (pickTitles[4]) pickTitles[4].textContent = t.serviceTitle5;
+    if (pickTitles[5]) pickTitles[5].textContent = t.serviceTitle6;
+
+    const pickSummaries = document.querySelectorAll('.pick-card .pick-summary');
+    if (pickSummaries[0]) pickSummaries[0].textContent = t.serviceSummaryPodcast;
+    if (pickSummaries[1]) pickSummaries[1].textContent = t.serviceSummaryVideo;
+    if (pickSummaries[2]) pickSummaries[2].textContent = t.serviceSummaryMusic;
+    if (pickSummaries[3]) pickSummaries[3].textContent = t.serviceSummaryEvents;
+    if (pickSummaries[4]) pickSummaries[4].textContent = t.serviceSummaryWorkflows;
+    if (pickSummaries[5]) pickSummaries[5].textContent = t.serviceSummaryAnalytics;
+
+    const planBadge = document.querySelector('.pricing-card.featured-plan .plan-badge');
+    if (planBadge) planBadge.innerHTML = `<i class="fas fa-crown"></i> ${t.planRecommended}`;
+
+    const planTitles = document.querySelectorAll('.pricing-card .plan-header h4');
+    if (planTitles[0]) planTitles[0].textContent = t.planFreeName;
+    if (planTitles[1]) planTitles[1].textContent = t.planProName;
+    if (planTitles[2]) planTitles[2].textContent = t.planEnterpriseName;
+
+    const customPrice = document.querySelectorAll('.pricing-card .price-tag')[2];
+    if (customPrice) customPrice.textContent = t.planCustom;
+
+    const monthlyLabels = document.querySelectorAll('.pricing-card .price-tag span');
+    monthlyLabels.forEach(label => {
+        label.textContent = t.monthLabel;
+    });
+
+    const featureItems = document.querySelectorAll('.pricing-card .feature-item');
+    const featureTexts = [
+        t.freeFeature1, t.freeFeature2, t.freeFeature3, t.freeFeature4, t.freeFeature5, t.freeFeature6,
+        t.proFeature1, t.proFeature2, t.proFeature3, t.proFeature4, t.proFeature5, t.proFeature6, t.proFeature7,
+        t.enterpriseFeature1, t.enterpriseFeature2, t.enterpriseFeature3, t.enterpriseFeature4, t.enterpriseFeature5, t.enterpriseFeature6
+    ];
+    featureItems.forEach((item, idx) => {
+        if (!featureTexts[idx]) return;
+        const icon = item.querySelector('i');
+        if (icon) {
+            item.innerHTML = `${icon.outerHTML} ${featureTexts[idx]}`;
+        }
+    });
+
+    const planButtons = document.querySelectorAll('.pricing-card .plan-btn');
+    if (planButtons[0]) planButtons[0].textContent = t.freeBtn;
+    if (planButtons[1]) planButtons[1].textContent = t.proBtn;
+    if (planButtons[2]) planButtons[2].textContent = t.contactSales;
+
+    const aboutHeadings = document.querySelectorAll('#about h3');
+    if (aboutHeadings[0]) aboutHeadings[0].innerHTML = `<i class="fas fa-user-tie"></i> ${t.founderTitle}`;
+    if (aboutHeadings[1]) aboutHeadings[1].textContent = t.visionHeading;
+
+    const aboutParagraphs = document.querySelectorAll('#about .portfolio-card p');
+    if (aboutParagraphs[0]) setHTML('#about .portfolio-card p', t.founderText);
+    if (aboutParagraphs[1]) aboutParagraphs[1].textContent = t.visionText1;
+    if (aboutParagraphs[2]) aboutParagraphs[2].innerHTML = t.visionText2;
+
+    setText('#contact .contact-details h4', t.contactInfoTitle);
+    setText('#contact .contact-details p:nth-of-type(1) strong', t.emailLabel);
+    setText('#contact .contact-details p:nth-of-type(2) strong', t.phoneLabel);
+    setText('#contactForm h3', t.contactUs);
+    setText('label[for="contactName"]', t.yourName);
+    setText('label[for="contactEmail"]', t.emailAddress);
+    setText('label[for="contactMessage"]', t.message);
+    setText('#contactStatus', t.formNote);
+
+    setAttr('#searchInput', 'placeholder', t.searchPlaceholder);
+    setAttr('#searchInput', 'title', t.searchTitle);
+    setAttr('#contactName', 'placeholder', language === 'zh' ? '张三' : language === 'es' ? 'Juan Pérez' : 'John Doe');
+    setAttr('#contactEmail', 'placeholder', language === 'zh' ? 'name@company.com' : language === 'es' ? 'nombre@empresa.com' : 'john@company.com');
+    setAttr('#contactMessage', 'placeholder', language === 'zh' ? '告诉我们你的项目或问题...' : language === 'es' ? 'Cuéntanos sobre tu proyecto o tus preguntas...' : 'Tell us about your project or ask any questions...');
+
+    const submitBtnLabel = document.querySelector('#contactForm .submit-btn');
+    if (submitBtnLabel) {
+        submitBtnLabel.innerHTML = `<i class="fas fa-paper-plane"></i> ${t.sendMessage}`;
+    }
+
+    const footerSections = document.querySelectorAll('.footer-section h5');
+    if (footerSections[1]) footerSections[1].textContent = t.footerServices;
+    if (footerSections[2]) footerSections[2].textContent = t.footerCompany;
+    if (footerSections[3]) footerSections[3].textContent = t.footerResources;
+    setText('.footer-section p', t.footerTagline);
+
+    const footerLinks = document.querySelectorAll('.footer-section ul li a');
+    const footerTexts = [
+        t.footerService1, t.footerService2, t.footerService3, t.footerService4,
+        t.footerCompany1, t.footerCompany2, t.footerCompany3, t.footerCompany4, t.footerCompany5,
+        t.footerResource1, t.footerResource2, t.footerResource3, t.footerResource4
+    ];
+    footerLinks.forEach((link, idx) => {
+        if (footerTexts[idx]) link.textContent = footerTexts[idx];
+    });
+
+    setHTML('.footer-bottom p', t.footerBottom);
+
+    const cookieStrong = document.querySelector('#cookieNotice p strong');
+    if (cookieStrong) cookieStrong.textContent = t.cookieTitle;
+    const cookieTextNode = document.querySelector('#cookieNotice p');
+    if (cookieTextNode) {
+        const cookieLink = cookieTextNode.querySelector('a');
+        const linkHtml = cookieLink ? cookieLink.outerHTML : '';
+        cookieTextNode.innerHTML = `<strong>${t.cookieTitle}</strong><br>${t.cookieText} ${linkHtml}`;
+    }
+    const cookiePolicyLink = document.querySelector('#cookieNotice p a');
+    if (cookiePolicyLink) cookiePolicyLink.textContent = t.cookiePolicy;
+    setText('#declineCookies', t.cookieEssential);
+    setText('#acceptCookies', t.cookieAccept);
+    
+    console.log('✓ Language localization applied:', language);
+}
+
+// Store language for search bar localization
+let currentLanguage = 'en';
+let currentTranslations = getTranslations().en;
+
+function updateSearchSuggestions() {
+    currentLanguage = getPreferredLanguage();
+    const translations = getTranslations();
+    currentTranslations = translations[currentLanguage] || translations.en;
+}
+
 class SmartSearch {
     constructor() {
         this.searchInput = document.getElementById('searchInput');
@@ -8,6 +718,8 @@ class SmartSearch {
         this.searchSuggestions = [];
         this.selectedSuggestionIndex = -1;
         this.debounceTimer = null;
+        this.currentHighlightIndex = 0;
+        this.allHighlights = [];
         
         if (!this.searchInput) return;
         
@@ -39,17 +751,15 @@ class SmartSearch {
             }
         });
         
-        // Add predefined suggestions (categories, features)
-        this.searchSuggestions = [
-            { text: 'Podcast Automation', category: 'Feature' },
-            { text: 'Video Production', category: 'Feature' },
-            { text: 'Music Creation', category: 'Feature' },
-            { text: 'Event Management', category: 'Feature' },
-            { text: 'Analytics', category: 'Tool' },
-            { text: 'Workflows', category: 'Tool' },
-            { text: 'Projects', category: 'Tool' },
-            { text: 'Pricing', category: 'Page' }
+        // Add predefined suggestions with current language translations
+        const suggestionTexts = currentTranslations.searchSuggestions || [
+            'Podcast Automation', 'Video Production', 'Music Creation', 'Event Management',
+            'Analytics', 'Workflows', 'Projects', 'Pricing'
         ];
+        this.searchSuggestions = suggestionTexts.map(text => ({
+            text: text,
+            category: currentTranslations.featureLabel || 'Feature'
+        }));
     }
     
     getContentType(element) {
@@ -92,7 +802,7 @@ class SmartSearch {
             // Show history when empty
             return this.searchHistory.slice(0, 5).map(h => ({
                 text: h,
-                category: '🕒 Recent',
+                category: currentTranslations.recent || '🕒 Recent',
                 isHistory: true
             }));
         }
@@ -131,7 +841,7 @@ class SmartSearch {
         if (!this.searchResultsPanel) return;
         
         if (suggestions.length === 0) {
-            this.searchResultsPanel.innerHTML = '<div class="search-empty">No suggestions found</div>';
+            this.searchResultsPanel.innerHTML = `<div class="search-empty">${currentTranslations.noSuggestions || 'No suggestions found'}</div>`;
             this.searchResultsPanel.style.display = 'block';
             return;
         }
@@ -199,6 +909,8 @@ class SmartSearch {
     performSearch() {
         const searchTerm = this.searchInput.value.trim();
         this.clearHighlights();
+        this.currentHighlightIndex = 0;
+        this.allHighlights = [];
         
         if (searchTerm === '') {
             document.querySelectorAll('.pick-card').forEach(card => {
@@ -236,18 +948,58 @@ class SmartSearch {
                 }
             });
             
-            this.displaySearchResults(matches, searchTerm);
+            // Wait for DOM to update, then collect all highlight elements
+            setTimeout(() => {
+                this.allHighlights = Array.from(document.querySelectorAll('mark.search-highlight'));
+                
+                this.displaySearchResults(matches, searchTerm);
+                
+                // Highlight current match
+                if (this.allHighlights.length > 0) {
+                    this.updateCurrentHighlight();
+                }
+                
+                // Scroll to first match
+                if (this.allHighlights.length > 0) {
+                    this.allHighlights[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 10);
         } else {
             this.displaySearchResults([], searchTerm);
         }
+    }
+    
+    updateCurrentHighlight() {
+        // Remove current class from all highlights
+        this.allHighlights.forEach(mark => mark.classList.remove('current'));
         
-        // Scroll to first match
-        if (matches.length > 0) {
-            setTimeout(() => {
-                const firstMatch = matches[0].element;
-                firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
+        // Add current class to the current highlight
+        if (this.allHighlights[this.currentHighlightIndex]) {
+            this.allHighlights[this.currentHighlightIndex].classList.add('current');
+            this.allHighlights[this.currentHighlightIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+        
+        // Update counter badge
+        this.updateCounterBadge();
+    }
+    
+    updateCounterBadge() {
+        const badge = document.querySelector('.search-nav-counter');
+        if (badge && this.allHighlights.length > 0) {
+            badge.textContent = `${this.currentHighlightIndex + 1} / ${this.allHighlights.length}`;
+        }
+    }
+    
+    navigateHighlights(direction) {
+        if (this.allHighlights.length === 0) return;
+        
+        if (direction === 'next') {
+            this.currentHighlightIndex = (this.currentHighlightIndex + 1) % this.allHighlights.length;
+        } else if (direction === 'prev') {
+            this.currentHighlightIndex = (this.currentHighlightIndex - 1 + this.allHighlights.length) % this.allHighlights.length;
+        }
+        
+        this.updateCurrentHighlight();
     }
     
     displaySearchResults(matches, searchTerm) {
@@ -257,12 +1009,30 @@ class SmartSearch {
             this.searchResultsPanel.innerHTML = `
                 <div class="search-no-results">
                     <i class="fas fa-search"></i>
-                    <p>No results found for "<strong>${this.escapeHtml(searchTerm)}</strong>"</p>
-                    <small>Try different keywords or check spelling</small>
+                    <p>${currentTranslations.noResultsFor || 'No results found for'} "<strong>${this.escapeHtml(searchTerm)}</strong>"</p>
+                    <small>${currentTranslations.tryDifferent || 'Try different keywords or check spelling'}</small>
                 </div>
             `;
             this.searchResultsPanel.style.display = 'block';
             return;
+        }
+        
+        // Count total occurrences
+        let totalOccurrences = this.allHighlights.length;
+        
+        // Fallback: count occurrences manually if highlights not yet collected
+        if (totalOccurrences === 0) {
+            totalOccurrences = matches.reduce((count, match) => {
+                const text = match.fullText.toLowerCase();
+                const term = searchTerm.toLowerCase();
+                let pos = 0;
+                let occurrences = 0;
+                while ((pos = text.indexOf(term, pos)) !== -1) {
+                    occurrences++;
+                    pos += term.length;
+                }
+                return count + occurrences;
+            }, 0);
         }
         
         // Group results by section
@@ -277,18 +1047,48 @@ class SmartSearch {
         
         let html = `
             <div class="search-header">
-                <strong>${matches.length} result${matches.length !== 1 ? 's' : ''} found</strong>
-                <span class="search-term">"${this.escapeHtml(searchTerm)}"</span>
+                <div class="search-header-info">
+                    <span class="search-result-badge">${totalOccurrences}</span>
+                    <div class="search-header-text">
+                        <strong>${totalOccurrences} ${(totalOccurrences !== 1 ? (currentTranslations.occurrences || 'occurrences') : (currentTranslations.occurrence || 'occurrence'))}</strong>
+                        <span class="search-term">"${this.escapeHtml(searchTerm)}"</span>
+                    </div>
+                </div>
+                <div class="search-nav-controls">
+                    <button class="search-nav-btn" id="searchPrev" title="${currentTranslations.prevResult || 'Previous result (Shift+Enter)'}">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                    <span class="search-nav-counter">1 / ${totalOccurrences}</span>
+                    <button class="search-nav-btn" id="searchNext" title="${currentTranslations.nextResult || 'Next result (Enter)'}">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
             </div>
             <div class="search-results-list">
         `;
         
         Object.entries(grouped).forEach(([sectionName, results]) => {
+            const sectionCount = results.reduce((count, r) => {
+                const text = r.fullText.toLowerCase();
+                const term = searchTerm.toLowerCase();
+                let pos = 0;
+                let occurrences = 0;
+                while ((pos = text.indexOf(term, pos)) !== -1) {
+                    occurrences++;
+                    pos += term.length;
+                }
+                return count + occurrences;
+            }, 0);
+            
             html += `<div class="search-section">
-                <h4 class="search-section-title">${sectionName}</h4>`;
+                <h4 class="search-section-title">
+                    <span class="section-name">${sectionName}</span>
+                    <span class="section-count">${sectionCount} ${(sectionCount !== 1 ? (currentTranslations.matches || 'matches') : (currentTranslations.match || 'match'))}</span>
+                </h4>`;
             
             results.slice(0, 5).forEach((result, idx) => {
                 const preview = this.getPreview(result.fullText, searchTerm);
+                const locationPath = this.getLocationPath(result);
                 html += `
                     <div class="search-result-item" data-index="${result.index}">
                         <div class="result-location">
@@ -296,6 +1096,7 @@ class SmartSearch {
                             <span class="result-type">${result.type}</span>
                         </div>
                         <div class="result-content">
+                            <div class="result-breadcrumb">${locationPath}</div>
                             <p class="result-preview">${preview}</p>
                         </div>
                         <i class="fas fa-arrow-right"></i>
@@ -304,7 +1105,7 @@ class SmartSearch {
             });
             
             if (results.length > 5) {
-                html += `<div class="search-more">+${results.length - 5} more in ${sectionName}</div>`;
+                html += `<div class="search-more">+${results.length - 5} ${currentTranslations.moreIn || 'more in'} ${sectionName}</div>`;
             }
             
             html += '</div>';
@@ -313,6 +1114,24 @@ class SmartSearch {
         html += '</div>';
         this.searchResultsPanel.innerHTML = html;
         this.searchResultsPanel.style.display = 'block';
+        
+        // Add navigation button handlers
+        const prevBtn = document.getElementById('searchPrev');
+        const nextBtn = document.getElementById('searchNext');
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.navigateHighlights('prev');
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.navigateHighlights('next');
+            });
+        }
         
         // Add click handlers for navigation
         this.searchResultsPanel.querySelectorAll('.search-result-item').forEach(item => {
@@ -328,6 +1147,30 @@ class SmartSearch {
                 }
             });
         });
+    }
+    
+    getLocationPath(result) {
+        const parts = [];
+        
+        if (result.sectionTitle && result.sectionTitle !== 'General') {
+            parts.push(result.sectionTitle);
+        }
+        
+        // Get parent heading if exists
+        let parent = result.element.closest('section');
+        if (parent) {
+            const headings = parent.querySelectorAll('h3, h4');
+            headings.forEach(h => {
+                if (h.contains(result.element) || (result.element.compareDocumentPosition(h) & Node.DOCUMENT_POSITION_PRECEDING)) {
+                    const text = h.textContent.trim();
+                    if (text && !parts.includes(text)) {
+                        parts.push(text);
+                    }
+                }
+            });
+        }
+        
+        return parts.length > 0 ? parts.join(' › ') : 'Page Content';
     }
     
     getPreview(text, searchTerm) {
@@ -349,18 +1192,18 @@ class SmartSearch {
     
     getSectionName(sectionId) {
         const sectionMap = {
-            'home': '🏠 Home',
-            'portfolio': '📂 Portfolio',
-            'podcast': '🎙️ Podcast',
-            'video': '🎬 Video',
-            'music': '🎵 Music',
-            'performance': '🎭 Performance',
-            'party': '🎉 Party',
-            'conference': '👥 Conference',
-            'projects': '📋 Projects',
-            'workflows': '⚙️ Workflows',
-            'analytics': '📊 Analytics',
-            'general': '📄 General'
+            'home': currentTranslations.sectionHome || '🏠 Home',
+            'portfolio': currentTranslations.sectionPortfolio || '📂 Portfolio',
+            'podcast': currentTranslations.sectionPodcast || '🎙️ Podcast',
+            'video': currentTranslations.sectionVideo || '🎬 Video',
+            'music': currentTranslations.sectionMusic || '🎵 Music',
+            'performance': currentTranslations.sectionPerformance || '🎭 Performance',
+            'party': currentTranslations.sectionParty || '🎉 Party',
+            'conference': currentTranslations.sectionConference || '👥 Conference',
+            'projects': currentTranslations.sectionProjects || '📋 Projects',
+            'workflows': currentTranslations.sectionWorkflows || '⚙️ Workflows',
+            'analytics': currentTranslations.sectionAnalytics || '📊 Analytics',
+            'general': currentTranslations.sectionGeneral || '📄 General'
         };
         return sectionMap[sectionId] || sectionId;
     }
@@ -405,6 +1248,17 @@ class SmartSearch {
             
             const items = this.searchResultsPanel.querySelectorAll('.suggestion-item');
             
+            // If we have active highlights, use Enter/Shift+Enter for navigation
+            if (this.allHighlights.length > 0 && (e.key === 'Enter')) {
+                e.preventDefault();
+                if (e.shiftKey) {
+                    this.navigateHighlights('prev');
+                } else {
+                    this.navigateHighlights('next');
+                }
+                return;
+            }
+            
             switch (e.key) {
                 case 'ArrowDown':
                     e.preventDefault();
@@ -428,6 +1282,8 @@ class SmartSearch {
                     break;
                 case 'Escape':
                     this.searchResultsPanel.style.display = 'none';
+                    this.clearHighlights();
+                    this.searchInput.value = '';
                     break;
             }
         });
@@ -654,33 +1510,9 @@ if (ctaButton) {
 const cookieNotice = document.getElementById('cookieNotice');
 const acceptCookiesBtn = document.getElementById('acceptCookies');
 const declineCookiesBtn = document.getElementById('declineCookies');
-const analyticsPasswordInput = document.getElementById('analyticsPassword');
-const cookieStatus = document.getElementById('cookieStatus');
-const runtimeAnalyticsPassword = window.OPTMO_ANALYTICS_PASSWORD;
 
 function isAnalyticsEnabled() {
     return localStorage.getItem('analyticsEnabled') === 'true';
-}
-
-function setCookieStatus(message, type = '') {
-    if (!cookieStatus) {
-        return;
-    }
-
-    cookieStatus.textContent = message;
-    cookieStatus.classList.remove('success', 'error');
-    if (type) {
-        cookieStatus.classList.add(type);
-    }
-}
-
-function hasValidAnalyticsPassword() {
-    if (!runtimeAnalyticsPassword || !analyticsPasswordInput) {
-        return false;
-    }
-
-    const enteredPassword = analyticsPasswordInput.value.trim();
-    return enteredPassword.length > 0 && enteredPassword === runtimeAnalyticsPassword;
 }
 
 // Check if user has already made a cookie choice
@@ -727,49 +1559,15 @@ function trackEvent(eventName, eventData) {
     }
 }
 
-// Accept cookies (simple - no analytics required)
+// Accept cookies with analytics
 if (acceptCookiesBtn) {
     acceptCookiesBtn.addEventListener('click', () => {
         localStorage.setItem('cookieConsent', 'accepted');
-        localStorage.setItem('analyticsEnabled', 'false');
+        localStorage.setItem('analyticsEnabled', 'true');
+        initializeTracking();
+        trackEvent('cookie_consent', { action: 'accepted_analytics' });
         if (cookieNotice) {
             cookieNotice.classList.remove('show');
-        }
-    });
-}
-
-// Enable Analytics button - shows password field
-const enableAnalyticsBtn = document.getElementById('enableAnalyticsBtn');
-const analyticsAuthSection = document.getElementById('analyticsAuthSection');
-const submitAnalyticsBtn = document.getElementById('submitAnalyticsBtn');
-
-if (enableAnalyticsBtn) {
-    enableAnalyticsBtn.addEventListener('click', () => {
-        if (analyticsAuthSection) {
-            analyticsAuthSection.style.display = 'block';
-        }
-        enableAnalyticsBtn.style.display = 'none';
-    });
-}
-
-if (submitAnalyticsBtn) {
-    submitAnalyticsBtn.addEventListener('click', () => {
-        localStorage.setItem('cookieConsent', 'accepted');
-        
-        if (!runtimeAnalyticsPassword) {
-            localStorage.setItem('analyticsEnabled', 'false');
-            setCookieStatus('Analytics password is not configured.', 'error');
-        } else if (!hasValidAnalyticsPassword()) {
-            localStorage.setItem('analyticsEnabled', 'false');
-            setCookieStatus('Incorrect analytics password.', 'error');
-        } else {
-            localStorage.setItem('analyticsEnabled', 'true');
-            setCookieStatus('Analytics enabled for this browser.', 'success');
-            initializeTracking();
-            trackEvent('cookie_consent', { action: 'accepted_analytics' });
-            if (cookieNotice) {
-                cookieNotice.classList.remove('show');
-            }
         }
     });
 }
@@ -782,7 +1580,6 @@ if (declineCookiesBtn) {
         if (cookieNotice) {
             cookieNotice.classList.remove('show');
         }
-        setCookieStatus('Analytics disabled.', '');
         console.log('🍪 Cookie tracking declined');
         trackEvent('cookie_consent', { action: 'declined' });
     });
@@ -939,9 +1736,88 @@ async function logoutFromHome() {
     }
 }
 
+// Contact Form Handler
+function initContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    if (!contactForm) return;
+
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = contactForm.querySelector('.submit-btn');
+        const statusEl = document.getElementById('contactStatus');
+        const originalText = submitBtn.innerHTML;
+        const action = contactForm.getAttribute('action') || '';
+        const formData = new FormData(contactForm);
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        if (statusEl) {
+            statusEl.textContent = 'Sending your message...';
+        }
+
+        if (action.includes('your-form-id')) {
+            if (statusEl) {
+                statusEl.textContent = 'Please replace your-form-id with your Formspree form ID.';
+            }
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            return;
+        }
+
+        try {
+            const response = await fetch(action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit form');
+            }
+
+            submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Message Sent!';
+            submitBtn.style.background = '#10b981';
+            if (statusEl) {
+                statusEl.textContent = 'Thanks! Your message has been sent.';
+            }
+            contactForm.reset();
+            
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+                submitBtn.style.background = '';
+                if (statusEl) {
+                    statusEl.textContent = 'This form is powered by Formspree.';
+                }
+            }, 3000);
+
+        } catch (error) {
+            console.error('Form submission error:', error);
+            submitBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error - Try Again';
+            submitBtn.style.background = '#ef4444';
+            if (statusEl) {
+                statusEl.textContent = 'Unable to send message. Please email optmo2public@gmail.com directly.';
+            }
+            
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+                submitBtn.style.background = '';
+            }, 3000);
+        }
+    });
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('OPTMO website loaded and interactive features initialized');
+    console.log('🚀 OPTMO website loaded and interactive features initialized');
+    applySystemLanguage();
+    updateSearchSuggestions();
     initSearchBar();
     initSidebarResize();
+    initContactForm();
+    console.log('📍 Current system language:', getPreferredLanguage());
 });

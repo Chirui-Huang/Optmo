@@ -243,8 +243,7 @@ Run this safety checklist before every push:
 If you'd like to support OPTMO development:
 
 - **GitHub Sponsors**: [Sponsor fredykraft](https://github.com/sponsors/fredykraft)
-- **PayPal**: saygoodnight88@gmail.com
-- **Zelle**: saygoodnight88@gmail.com
+- **PayPal**: optmo256@gmail.com
 - **Direct Support**: Visit [Donation Page](donate.html)
 
 ## 📝 License
