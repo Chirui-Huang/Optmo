@@ -15,6 +15,53 @@
         </div>
         <div class="header-center"></div>
         <div class="header-right">
+            <!-- Language Switcher -->
+            <div class="language-menu">
+                <button class="icon-btn language-btn" id="languageBtn" title="Language">
+                    <i class="fas fa-globe"></i>
+                </button>
+                <div class="language-dropdown" id="languageDropdown" style="display: none;">
+                    <button class="language-option" data-lang="en">
+                        <i class="fas fa-check" style="display: none;"></i> English
+                    </button>
+                    <button class="language-option" data-lang="zh">
+                        <i class="fas fa-check" style="display: none;"></i> 中文
+                    </button>
+                    <button class="language-option" data-lang="es">
+                        <i class="fas fa-check" style="display: none;"></i> Español
+                    </button>
+                    <button class="language-option" data-lang="fr">
+                        <i class="fas fa-check" style="display: none;"></i> Français
+                    </button>
+                    <button class="language-option" data-lang="de">
+                        <i class="fas fa-check" style="display: none;"></i> Deutsch
+                    </button>
+                    <button class="language-option" data-lang="ja">
+                        <i class="fas fa-check" style="display: none;"></i> 日本語
+                    </button>
+                    <button class="language-option" data-lang="pt">
+                        <i class="fas fa-check" style="display: none;"></i> Português
+                    </button>
+                    <button class="language-option" data-lang="ko">
+                        <i class="fas fa-check" style="display: none;"></i> 한국어
+                    </button>
+                    <button class="language-option" data-lang="it">
+                        <i class="fas fa-check" style="display: none;"></i> Italiano
+                    </button>
+                    <button class="language-option" data-lang="ru">
+                        <i class="fas fa-check" style="display: none;"></i> Русский
+                    </button>
+                    <button class="language-option" data-lang="ar">
+                        <i class="fas fa-check" style="display: none;"></i> العربية
+                    </button>
+                    <button class="language-option" data-lang="hi">
+                        <i class="fas fa-check" style="display: none;"></i> हिन्दी
+                    </button>
+                    <button class="language-option" data-lang="vi">
+                        <i class="fas fa-check" style="display: none;"></i> Tiếng Việt
+                    </button>
+                </div>
+            </div>
             <a href="index.html" class="plan-btn" style="padding: 6px 12px; font-size: 12px; width: auto;">Back to Home</a>
         </div>
     </header>
@@ -81,6 +128,7 @@
         </footer>
     </main>
     
+    <script src="js/main.js"></script>
     <script>
         // Copy email to clipboard
         const copyEmailBtn = document.getElementById('copyEmailBtn');

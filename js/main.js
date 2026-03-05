@@ -1,12 +1,49 @@
 // Language Localization
+const SUPPORTED_LANGUAGES = ['en', 'zh', 'es', 'fr', 'de', 'ja', 'pt', 'ko', 'it', 'ru', 'ar', 'hi', 'vi'];
+
 function getPreferredLanguage() {
+    // Check localStorage first
+    const savedLanguage = localStorage.getItem('optmo_language');
+    if (savedLanguage && SUPPORTED_LANGUAGES.includes(savedLanguage)) {
+        return savedLanguage;
+    }
+
+    // Fall back to browser language detection
     const locale = (navigator.languages && navigator.languages[0]) || navigator.language || 'en';
     const lower = locale.toLowerCase();
-    console.log('Browser locale:', locale, '→ Detected language:', lower.startsWith('zh') ? 'zh' : lower.startsWith('es') ? 'es' : 'en');
-
-    if (lower.startsWith('zh')) return 'zh';
-    if (lower.startsWith('es')) return 'es';
+    
+    // Map browser language codes to supported languages
+    const languageMap = {
+        'zh': 'zh',
+        'es': 'es',
+        'fr': 'fr',
+        'de': 'de',
+        'ja': 'ja',
+        'pt': 'pt',
+        'ko': 'ko',
+        'it': 'it',
+        'ru': 'ru',
+        'ar': 'ar',
+        'hi': 'hi',
+        'vi': 'vi'
+    };
+    
+    for (const [code, lang] of Object.entries(languageMap)) {
+        if (lower.startsWith(code)) {
+            console.log('Browser locale:', locale, '→ Detected language:', lang);
+            return lang;
+        }
+    }
+    
+    console.log('Browser locale:', locale, '→ Detected language: en (fallback)');
     return 'en';
+}
+
+function setLanguage(lang) {
+    if (!SUPPORTED_LANGUAGES.includes(lang)) return;
+    localStorage.setItem('optmo_language', lang);
+    applySystemLanguage();
+    updateSearchSuggestions();
 }
 
 function getTranslations() {
@@ -113,7 +150,7 @@ function getTranslations() {
             enterpriseFeature6: 'White-label options',
             aboutTitle: 'About Us',
             founderTitle: 'Founder',
-            founderText: 'OPTMO was founded by <strong><a href="https://fredykraft.github.io/Chirui" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong>, a researcher in Operations, Information, and Technology. With a focus on practical automation solutions, Chirui created OPTMO to help creators and organizers streamline their workflows through intelligent tools.',
+            founderText: 'OPTMO was founded by <strong><a href="https://chirui.online" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong>, a researcher in Operations, Information, and Technology. With a focus on practical automation solutions, Chirui created OPTMO to help creators and organizers streamline their workflows through intelligent tools.',
             visionTitle: 'Our Vision',
             visionHeading: 'What We\'re Building',
             visionText1: 'OPTMO is in active development as we build the future of content and event automation. Our goal is to help creators and organizers save time on repetitive tasks so they can focus on creativity and strategy. We\'re currently working on AI-powered tools for podcast production, video editing, music creation, and event management.',
@@ -166,7 +203,64 @@ function getTranslations() {
             sectionAnalytics: '📊 Analytics',
             sectionGeneral: '📄 General',
             recent: '🕒 Recent',
-            featureLabel: 'Feature'
+            featureLabel: 'Feature',
+            // Login page translations
+            welcomeBack: 'Welcome Back',
+            loginToAccount: 'Login to your OPTMO account',
+            secureLogin: 'Secure Login',
+            secureLoginDesc: 'Sign in with your account credentials. If the email doesn\'t exist yet, OPTMO will create your account automatically.',
+            emailAddressLabel: 'Email Address',
+            passwordLabel: 'Password',
+            loginBtn: 'Login to Account',
+            dontHaveAccount: 'Don\'t have an account?',
+            signUpHere: 'Sign up here',
+            forgotPassword: 'Forgot password?',
+            backToHome: 'Back to Home',
+            pleaseFillin: 'Please fill in all fields.',
+            validEmail: 'Please enter a valid email address.',
+            passwordMinLength: 'Password must be at least 3 characters.',
+            loggingIn: 'Logging in...',
+            loginSuccessful: 'Login successful! Redirecting...',
+            // Donate page translations
+            supportOptmo: 'Support OPTMO',
+            donationDesc: 'Your donations help us keep building automation tools for creators, teams, and event organizers.',
+            choosePayment: 'Choose a payment method to support us',
+            paypal: 'PayPal',
+            paypalEmail: 'optmo256@gmail.com',
+            donateNow: 'Donate Now',
+            githubSponsors: 'GitHub Sponsors',
+            directSupport: 'Direct support on GitHub',
+            sponsor: 'Sponsor',
+            paypalEmailLabel: 'PayPal Email:',
+            copyEmail: 'Copy Email',
+            copied: 'Copied!',
+            thankYouSupport: 'Thank you for supporting open development.',
+            // Account page translations
+            myAccount: 'My Account',
+            profile: 'Profile',
+            settings: 'Settings',
+            billing: 'Billing',
+            security: 'Security',
+            logout: 'Logout',
+            editProfile: 'Edit Profile',
+            changePassword: 'Change Password',
+            currentPassword: 'Current Password',
+            newPassword: 'New Password',
+            confirmPassword: 'Confirm Password',
+            saveChanges: 'Save Changes',
+            updateSuccessful: 'Profile updated successfully!',
+            accountCreated: 'Account Created',
+            lastLogin: 'Last Login',
+            memberSince: 'Member Since',
+            subscriptionStatus: 'Subscription Status',
+            currentPlan: 'Current Plan',
+            upgradeNow: 'Upgrade Now',
+            // Language switcher
+            language: 'Language',
+            selectLanguage: 'Select Language',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español'
         },
         zh: {
             htmlLang: 'zh-CN',
@@ -270,7 +364,7 @@ function getTranslations() {
             enterpriseFeature6: '白标方案',
             aboutTitle: '关于我们',
             founderTitle: '创始人',
-            founderText: 'OPTMO 由 <strong><a href="https://fredykraft.github.io/Chirui" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong> 创立，他是一位研究运营、信息与技术的学者。Chirui 专注于实用型自动化方案，创建 OPTMO 旨在帮助创作者与组织者通过智能工具优化工作流程。',
+            founderText: 'OPTMO 由 <strong><a href="https://chirui.online" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong> 创立，他是一位研究运营、信息与技术的学者。Chirui 专注于实用型自动化方案，创建 OPTMO 旨在帮助创作者与组织者通过智能工具优化工作流程。',
             visionTitle: '我们的愿景',
             visionHeading: '我们正在构建什么',
             visionText1: 'OPTMO 正在积极开发中，致力于构建内容与活动自动化的未来。我们的目标是帮助创作者和组织者节省重复性工作的时间，把精力投入到创意与策略中。我们正在推进播客制作、视频编辑、音乐创作与活动管理的 AI 工具。',
@@ -323,7 +417,64 @@ function getTranslations() {
             sectionAnalytics: '📊 分析',
             sectionGeneral: '📄 通用',
             recent: '🕒 最近',
-            featureLabel: '功能'
+            featureLabel: '功能',
+            // Login page translations
+            welcomeBack: '欢迎回来',
+            loginToAccount: '登录您的 OPTMO 账户',
+            secureLogin: '安全登录',
+            secureLoginDesc: '使用您的账户凭证登录。如果邮箱尚未注册，OPTMO 将自动为您创建账户。',
+            emailAddressLabel: '邮箱地址',
+            passwordLabel: '密码',
+            loginBtn: '登录账户',
+            dontHaveAccount: '还没有账户？',
+            signUpHere: '在此注册',
+            forgotPassword: '忘记密码？',
+            backToHome: '返回主页',
+            pleaseFillin: '请填写所有字段。',
+            validEmail: '请输入有效的邮箱地址。',
+            passwordMinLength: '密码至少需要 3 个字符。',
+            loggingIn: '登录中...',
+            loginSuccessful: '登录成功！正在跳转...',
+            // Donate page translations
+            supportOptmo: '支持 OPTMO',
+            donationDesc: '您的捐赠帮助我们为创作者、团队和活动组织者持续开发自动化工具。',
+            choosePayment: '选择支付方式支持我们',
+            paypal: 'PayPal',
+            paypalEmail: 'optmo256@gmail.com',
+            donateNow: '现在捐赠',
+            githubSponsors: 'GitHub 赞助',
+            directSupport: '在 GitHub 上直接支持',
+            sponsor: '赞助',
+            paypalEmailLabel: 'PayPal 邮箱：',
+            copyEmail: '复制邮箱',
+            copied: '已复制！',
+            thankYouSupport: '感谢您支持开源开发。',
+            // Account page translations
+            myAccount: '我的账户',
+            profile: '资料',
+            settings: '设置',
+            billing: '账单',
+            security: '安全',
+            logout: '退出登录',
+            editProfile: '编辑资料',
+            changePassword: '更改密码',
+            currentPassword: '当前密码',
+            newPassword: '新密码',
+            confirmPassword: '确认密码',
+            saveChanges: '保存更改',
+            updateSuccessful: '资料更新成功！',
+            accountCreated: '账户已创建',
+            lastLogin: '上次登录',
+            memberSince: '成为会员时间',
+            subscriptionStatus: '订阅状态',
+            currentPlan: '当前方案',
+            upgradeNow: '立即升级',
+            // Language switcher
+            language: '语言',
+            selectLanguage: '选择语言',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español'
         },
         es: {
             htmlLang: 'es',
@@ -427,7 +578,7 @@ function getTranslations() {
             enterpriseFeature6: 'Opciones de marca blanca',
             aboutTitle: 'Sobre nosotros',
             founderTitle: 'Fundador',
-            founderText: 'OPTMO fue fundada por <strong><a href="https://fredykraft.github.io/Chirui" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong>, investigador en Operaciones, Información y Tecnología. Con foco en soluciones prácticas de automatización, Chirui creó OPTMO para ayudar a creadores y organizadores a optimizar sus flujos con herramientas inteligentes.',
+            founderText: 'OPTMO fue fundada por <strong><a href="https://chirui.online" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong>, investigador en Operaciones, Información y Tecnología. Con foco en soluciones prácticas de automatización, Chirui creó OPTMO para ayudar a creadores y organizadores a optimizar sus flujos con herramientas inteligentes.',
             visionTitle: 'Nuestra visión',
             visionHeading: 'Qué estamos construyendo',
             visionText1: 'OPTMO está en desarrollo activo mientras construimos el futuro de la automatización de contenido y eventos. Nuestro objetivo es ayudar a creadores y organizadores a ahorrar tiempo en tareas repetitivas para enfocarse en creatividad y estrategia. Actualmente trabajamos en herramientas con IA para podcast, video, música y gestión de eventos.',
@@ -480,7 +631,274 @@ function getTranslations() {
             sectionAnalytics: '📊 Analíticas',
             sectionGeneral: '📄 General',
             recent: '🕒 Reciente',
-            featureLabel: 'Función'
+            featureLabel: 'Función',
+            // Login page translations
+            welcomeBack: 'Bienvenido de Vuelta',
+            loginToAccount: 'Inicia sesión en tu cuenta de OPTMO',
+            secureLogin: 'Inicio de sesión seguro',
+            secureLoginDesc: 'Inicia sesión con tus credenciales de cuenta. Si el correo aún no existe, OPTMO creará tu cuenta automáticamente.',
+            emailAddressLabel: 'Dirección de Correo Electrónico',
+            passwordLabel: 'Contraseña',
+            loginBtn: 'Iniciar sesión en la cuenta',
+            dontHaveAccount: '¿No tienes cuenta?',
+            signUpHere: 'Regístrate aquí',
+            forgotPassword: '¿Olvidaste tu contraseña?',
+            backToHome: 'Volver a Inicio',
+            pleaseFillin: 'Por favor completa todos los campos.',
+            validEmail: 'Por favor ingresa una dirección de correo válida.',
+            passwordMinLength: 'La contraseña debe tener al menos 3 caracteres.',
+            loggingIn: 'Iniciando sesión...',
+            loginSuccessful: '¡Inicio de sesión exitoso! Redirigiendo...',
+            // Donate page translations
+            supportOptmo: 'Apoyar OPTMO',
+            donationDesc: 'Tus donaciones nos ayudan a seguir construyendo herramientas de automatización para creadores, equipos y organizadores de eventos.',
+            choosePayment: 'Elige un método de pago para apoyarnos',
+            paypal: 'PayPal',
+            paypalEmail: 'optmo256@gmail.com',
+            donateNow: 'Donar Ahora',
+            githubSponsors: 'Patrocinadores de GitHub',
+            directSupport: 'Apoyo directo en GitHub',
+            sponsor: 'Patrocinar',
+            paypalEmailLabel: 'Correo de PayPal:',
+            copyEmail: 'Copiar Correo',
+            copied: '¡Copiado!',
+            thankYouSupport: 'Gracias por apoyar el desarrollo de código abierto.',
+            // Account page translations
+            myAccount: 'Mi Cuenta',
+            profile: 'Perfil',
+            settings: 'Configuración',
+            billing: 'Facturación',
+            security: 'Seguridad',
+            logout: 'Cerrar sesión',
+            editProfile: 'Editar Perfil',
+            changePassword: 'Cambiar Contraseña',
+            currentPassword: 'Contraseña Actual',
+            newPassword: 'Nueva Contraseña',
+            confirmPassword: 'Confirmar Contraseña',
+            saveChanges: 'Guardar Cambios',
+            updateSuccessful: '¡Perfil actualizado correctamente!',
+            accountCreated: 'Cuenta Creada',
+            lastLogin: 'Último Inicio de Sesión',
+            memberSince: 'Miembro Desde',
+            subscriptionStatus: 'Estado de Suscripción',
+            currentPlan: 'Plan Actual',
+            upgradeNow: 'Actualizar Ahora',
+            // Language switcher
+            language: 'Idioma',
+            selectLanguage: 'Seleccionar Idioma',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español',
+            french: 'Français',
+            german: 'Deutsch',
+            japanese: '日本語',
+            portuguese: 'Português',
+            korean: '한국어',
+            italian: 'Italiano',
+            russian: 'Русский',
+            arabic: 'العربية',
+            hindi: 'हिन्दी',
+            vietnamese: 'Tiếng Việt'
+        },
+        fr: {
+            htmlLang: 'fr',
+            account: 'Compte',
+            home: 'Accueil',
+            language: 'Langue',
+            selectLanguage: 'Sélectionner la Langue',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español',
+            french: 'Français',
+            german: 'Deutsch',
+            japanese: '日本語',
+            portuguese: 'Português',
+            korean: '한국어',
+            italian: 'Italiano',
+            russian: 'Русский',
+            arabic: 'العربية',
+            hindi: 'हिन्दी',
+            vietnamese: 'Tiếng Việt'
+        },
+        de: {
+            htmlLang: 'de',
+            account: 'Konto',
+            home: 'Startseite',
+            language: 'Sprache',
+            selectLanguage: 'Sprache Wählen',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español',
+            french: 'Français',
+            german: 'Deutsch',
+            japanese: '日本語',
+            portuguese: 'Português',
+            korean: '한국어',
+            italian: 'Italiano',
+            russian: 'Русский',
+            arabic: 'العربية',
+            hindi: 'हिन्दी',
+            vietnamese: 'Tiếng Việt'
+        },
+        ja: {
+            htmlLang: 'ja',
+            account: 'アカウント',
+            home: 'ホーム',
+            language: '言語',
+            selectLanguage: '言語を選択',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español',
+            french: 'Français',
+            german: 'Deutsch',
+            japanese: '日本語',
+            portuguese: 'Português',
+            korean: '한국어',
+            italian: 'Italiano',
+            russian: 'Русский',
+            arabic: 'العربية',
+            hindi: 'हिन्दी',
+            vietnamese: 'Tiếng Việt'
+        },
+        pt: {
+            htmlLang: 'pt',
+            account: 'Conta',
+            home: 'Início',
+            language: 'Idioma',
+            selectLanguage: 'Selecionar Idioma',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español',
+            french: 'Français',
+            german: 'Deutsch',
+            japanese: '日本語',
+            portuguese: 'Português',
+            korean: '한국어',
+            italian: 'Italiano',
+            russian: 'Русский',
+            arabic: 'العربية',
+            hindi: 'हिन्दी',
+            vietnamese: 'Tiếng Việt'
+        },
+        ko: {
+            htmlLang: 'ko',
+            account: '계정',
+            home: '홈',
+            language: '언어',
+            selectLanguage: '언어 선택',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español',
+            french: 'Français',
+            german: 'Deutsch',
+            japanese: '日本語',
+            portuguese: 'Português',
+            korean: '한국어',
+            italian: 'Italiano',
+            russian: 'Русский',
+            arabic: 'العربية',
+            hindi: 'हिन्दी',
+            vietnamese: 'Tiếng Việt'
+        },
+        it: {
+            htmlLang: 'it',
+            account: 'Account',
+            home: 'Home',
+            language: 'Lingua',
+            selectLanguage: 'Seleziona Lingua',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español',
+            french: 'Français',
+            german: 'Deutsch',
+            japanese: '日本語',
+            portuguese: 'Português',
+            korean: '한국어',
+            italian: 'Italiano',
+            russian: 'Русский',
+            arabic: 'العربية',
+            hindi: 'हिन्दी',
+            vietnamese: 'Tiếng Việt'
+        },
+        ru: {
+            htmlLang: 'ru',
+            account: 'Учетная запись',
+            home: 'Главная',
+            language: 'Язык',
+            selectLanguage: 'Выберите язык',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español',
+            french: 'Français',
+            german: 'Deutsch',
+            japanese: '日本語',
+            portuguese: 'Português',
+            korean: '한국어',
+            italian: 'Italiano',
+            russian: 'Русский',
+            arabic: 'العربية',
+            hindi: 'हिन्दी',
+            vietnamese: 'Tiếng Việt'
+        },
+        ar: {
+            htmlLang: 'ar',
+            account: 'الحساب',
+            home: 'الرئيسية',
+            language: 'اللغة',
+            selectLanguage: 'اختر لغة',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español',
+            french: 'Français',
+            german: 'Deutsch',
+            japanese: '日本語',
+            portuguese: 'Português',
+            korean: '한국어',
+            italian: 'Italiano',
+            russian: 'Русский',
+            arabic: 'العربية',
+            hindi: 'हिन्दी',
+            vietnamese: 'Tiếng Việt'
+        },
+        hi: {
+            htmlLang: 'hi',
+            account: 'खाता',
+            home: 'होम',
+            language: 'भाषा',
+            selectLanguage: 'भाषा चुनें',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español',
+            french: 'Français',
+            german: 'Deutsch',
+            japanese: '日本語',
+            portuguese: 'Português',
+            korean: '한국어',
+            italian: 'Italiano',
+            russian: 'Русский',
+            arabic: 'العربية',
+            hindi: 'हिन्दी',
+            vietnamese: 'Tiếng Việt'
+        },
+        vi: {
+            htmlLang: 'vi',
+            account: 'Tài khoản',
+            home: 'Trang chủ',
+            language: 'Ngôn Ngữ',
+            selectLanguage: 'Chọn Ngôn Ngữ',
+            english: 'English',
+            chinese: '中文',
+            spanish: 'Español',
+            french: 'Français',
+            german: 'Deutsch',
+            japanese: '日本語',
+            portuguese: 'Português',
+            korean: '한국어',
+            italian: 'Italiano',
+            russian: 'Русский',
+            arabic: 'العربية',
+            hindi: 'हिन्दी',
+            vietnamese: 'Tiếng Việt'
         }
     };
 }
@@ -1814,11 +2232,71 @@ function initContactForm() {
     });
 }
 
+// Language Switcher Initialization
+function initLanguageSwitcher() {
+    const languageBtn = document.getElementById('languageBtn');
+    const languageDropdown = document.getElementById('languageDropdown');
+    const languageOptions = document.querySelectorAll('.language-option');
+
+    if (!languageBtn || !languageDropdown) return;
+
+    // Toggle dropdown visibility
+    languageBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (languageDropdown.style.display === 'none') {
+            languageDropdown.style.display = 'block';
+            updateLanguageCheckmarks();
+        } else {
+            languageDropdown.style.display = 'none';
+        }
+    });
+
+    // Handle language selection
+    languageOptions.forEach(option => {
+        option.addEventListener('click', (e) => {
+            e.preventDefault();
+            const lang = option.getAttribute('data-lang');
+            setLanguage(lang);
+            languageDropdown.style.display = 'none';
+            updateLanguageCheckmarks();
+        });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.language-menu')) {
+            languageDropdown.style.display = 'none';
+        }
+    });
+
+    // Set initial checkmark
+    updateLanguageCheckmarks();
+}
+
+function updateLanguageCheckmarks() {
+    const currentLang = getPreferredLanguage();
+    const languageOptions = document.querySelectorAll('.language-option');
+    
+    languageOptions.forEach(option => {
+        const lang = option.getAttribute('data-lang');
+        const checkIcon = option.querySelector('i');
+        
+        if (lang === currentLang) {
+            option.classList.add('active');
+            if (checkIcon) checkIcon.style.display = 'inline';
+        } else {
+            option.classList.remove('active');
+            if (checkIcon) checkIcon.style.display = 'none';
+        }
+    });
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 OPTMO website loaded and interactive features initialized');
     applySystemLanguage();
     updateSearchSuggestions();
+    initLanguageSwitcher();
     initSearchBar();
     initSidebarResize();
     initContactForm();
