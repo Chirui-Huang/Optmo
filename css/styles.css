@@ -1780,6 +1780,17 @@ mark.search-highlight.current {
     color: #9ca3af;
 }
 
+.footer-bottom a {
+    color: #22c55e;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer-bottom a:hover {
+    color: #4ade80;
+    text-decoration: underline;
+}
+
 /* Responsive Design */
 /* Sidebar toggleable on all screen sizes */
 
