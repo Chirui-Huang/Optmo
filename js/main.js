@@ -76,7 +76,6 @@ function getTranslations() {
             contactInfoTitle: 'Contact Information',
             emailLabel: 'Email:',
             phoneLabel: 'Phone:',
-            redNoteLabel: 'RedNote:',
             contactUs: 'Contact Us',
             yourName: 'Your Name *',
             emailAddress: 'Email Address *',
@@ -291,7 +290,6 @@ function getTranslations() {
             contactInfoTitle: '联系方式',
             emailLabel: '邮箱：',
             phoneLabel: '电话：',
-            redNoteLabel: '小红书：',
             contactUs: '联系我们',
             yourName: '你的姓名 *',
             emailAddress: '邮箱地址 *',
@@ -506,7 +504,6 @@ function getTranslations() {
             contactInfoTitle: 'Información de Contacto',
             emailLabel: 'Correo:',
             phoneLabel: 'Teléfono:',
-            redNoteLabel: 'RedNote:',
             contactUs: 'Contáctanos',
             yourName: 'Tu Nombre *',
             emailAddress: 'Correo Electrónico *',
@@ -1069,7 +1066,6 @@ function applySystemLanguage() {
     setText('#contact .contact-details h4', t.contactInfoTitle);
     setText('#contact .contact-details p:nth-of-type(1) strong', t.emailLabel);
     setText('#contact .contact-details p:nth-of-type(2) strong', t.phoneLabel);
-    setText('#contact .contact-details p:nth-of-type(3) strong', t.redNoteLabel);
     setText('#contactForm h3', t.contactUs);
     setText('label[for="contactName"]', t.yourName);
     setText('label[for="contactEmail"]', t.emailAddress);
