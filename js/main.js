@@ -71,6 +71,7 @@ function getTranslations() {
             analytics: 'Analytics',
             heroTitle: 'Automate Your Content & Events',
             heroSubtitle: 'AI-powered workflows for podcasts, videos, music, and events - Save 90% of production time and focus on what matters',
+            startTrial: "Let's collaborate",
             contactSales: 'Contact Sales',
             contactInfoTitle: 'Contact Information',
             emailLabel: 'Email:',
