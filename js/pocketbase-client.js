@@ -51,8 +51,7 @@ async function signUpUser(email, password, displayName) {
         localStorage.setItem('optmo_user', JSON.stringify({
             id: authData.record.id,
             email: authData.record.email,
-            displayName: authData.record.name,
-            plan: 'free'
+            displayName: authData.record.name
         }));
         localStorage.setItem('optmo_logged_in', 'true');
 
@@ -77,8 +76,7 @@ async function loginUser(email, password) {
         localStorage.setItem('optmo_user', JSON.stringify({
             id: authData.record.id,
             email: authData.record.email,
-            displayName: authData.record.name,
-            plan: 'free'
+            displayName: authData.record.name
         }));
         localStorage.setItem('optmo_logged_in', 'true');
 
@@ -184,8 +182,7 @@ async function updateUserProfile(userId, updates) {
         const currentUser = JSON.parse(localStorage.getItem('optmo_user') || '{}');
         localStorage.setItem('optmo_user', JSON.stringify({
             ...currentUser,
-            displayName: updates.name || updatedUser.name || currentUser.displayName,
-            plan: currentUser.plan || 'free'
+            displayName: updates.name || updatedUser.name || currentUser.displayName
         }));
 
         return { success: true, profile: { user: updatedUser, profile: profileRecord } };
