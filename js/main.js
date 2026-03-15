@@ -48,6 +48,30 @@ function closeSidebarMenu() {
     document.body.classList.remove('sidebar-open');
 }
 
+// Ensure there's always a visible way to open the sidebar on pages
+function ensureSidebarToggleVisible() {
+    // If the standard toggle exists, nothing to do
+    if (document.getElementById('sidebarToggle')) return;
+
+    // Avoid creating duplicate floating toggles
+    if (document.getElementById('sidebarToggleFloating')) return;
+
+    const btn = document.createElement('button');
+    btn.id = 'sidebarToggleFloating';
+    btn.className = 'sidebar-toggle floating';
+    btn.title = 'Toggle Menu';
+    btn.innerHTML = '<i class="fas fa-bars"></i>';
+    btn.addEventListener('click', (e) => {
+        const sb = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sb) sb.classList.add('active');
+        if (overlay) overlay.classList.add('active');
+        document.body.classList.add('sidebar-open');
+    });
+
+    document.body.appendChild(btn);
+}
+
 function setLanguage(lang) {
     if (!SUPPORTED_LANGUAGES.includes(lang)) return;
     localStorage.setItem('optmo_language', lang);
@@ -954,6 +978,11 @@ async function loadSharedPartials() {
 
     // Re-run any init that expects these elements
     if (typeof initUI === 'function') initUI();
+    // Ensure a visible sidebar toggle exists on pages without the injected header
+    if (typeof ensureSidebarToggleVisible === 'function') ensureSidebarToggleVisible();
+    // Ensure search initializes after partials are injected
+    if (typeof updateSearchSuggestions === 'function') updateSearchSuggestions();
+    if (typeof initSearchBar === 'function') initSearchBar();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1803,7 +1832,10 @@ class SmartSearch {
 
 // Initialize smart search on page load
 function initSearchBar() {
+    // Prevent multiple initializations
+    if (window.smartSearchInstance) return window.smartSearchInstance;
     const smartSearch = new SmartSearch();
+    window.smartSearchInstance = smartSearch;
     
     // Keyboard shortcut: Cmd+K (Mac) or Ctrl+K (Windows/Linux) to focus search
     document.addEventListener('keydown', (e) => {
@@ -2395,3 +2427,43 @@ document.addEventListener('DOMContentLoaded', () => {
     initContactForm();
     console.log('📍 Current system language:', getPreferredLanguage());
 });
+
+// Robust fallback: ensure a visible sidebar toggle quickly on pages
+// even if partials fail to load or load slowly. Create early, retry,
+// and remove when a real `#sidebarToggle` is detected.
+(function ensureFloatingToggleEarly() {
+    // create immediately in case header not present
+    try {
+        ensureSidebarToggleVisible();
+    } catch (e) {
+        // ignore - function may not be parsed yet in some execution orders
+    }
+
+    // Retry after short delays to handle slow partials injection
+    setTimeout(() => { try { ensureSidebarToggleVisible(); } catch (e) {} }, 250);
+    setTimeout(() => { try { ensureSidebarToggleVisible(); } catch (e) {} }, 1000);
+
+    // Watch for the real toggle to appear and remove floating fallback
+    const observer = new MutationObserver((mutations, obs) => {
+        const real = document.getElementById('sidebarToggle');
+        const floating = document.getElementById('sidebarToggleFloating');
+        if (real && floating) {
+            try { floating.remove(); } catch (e) {}
+            obs.disconnect();
+        }
+    });
+
+    // Start observing body for changes where partials may be injected
+    try {
+        observer.observe(document.body, { childList: true, subtree: true });
+    } catch (e) {
+        // If observe fails (rare), schedule a final cleanup check
+        setTimeout(() => {
+            const real = document.getElementById('sidebarToggle');
+            const floating = document.getElementById('sidebarToggleFloating');
+            if (real && floating) {
+                try { floating.remove(); } catch (e) {}
+            }
+        }, 1500);
+    }
+})();
