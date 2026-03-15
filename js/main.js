@@ -1897,6 +1897,24 @@ function initUI() {
             }
         });
     }
+
+    // Ensure Home nav item behaves contextually:
+    // - On the homepage, use an internal fragment link (#home) for smooth scroll.
+    // - On other pages, link to the homepage (index.html).
+    try {
+        document.querySelectorAll('.nav-item').forEach(link => {
+            const icon = link.querySelector('i');
+            if (icon && icon.classList.contains('fa-home')) {
+                if (window.location.pathname === '/' || window.location.pathname.endsWith('/index.html')) {
+                    link.setAttribute('href', '#home');
+                } else {
+                    link.setAttribute('href', 'index.html');
+                }
+            }
+        });
+    } catch (e) {
+        console.warn('Failed to normalize Home nav item href', e);
+    }
 }
 
 // Active Nav Item on Scroll
