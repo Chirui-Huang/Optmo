@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Contact OPTMO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Shared header fallback -->
+    <header class="top-header">
+        <div class="header-left">
+            <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo-small">OPTMO</div>
+        </div>
+        <div class="header-center"></div>
+        <div class="header-right">
+            <button class="icon-btn" title="Notifications">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">2</span>
+            </button>
+            <div class="language-menu">
+                <button class="icon-btn language-btn" id="languageBtn" title="Language">
+                    <i class="fas fa-globe"></i>
+                </button>
+                <div class="language-dropdown" id="languageDropdown" style="display: none;"></div>
+            </div>
+            <div class="account-menu">
+                <button class="account-btn" id="accountBtn">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Account</span>
+                </button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="account.html"><i class="fas fa-user"></i> My Account</a>
+                    <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> My Dashboard</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <hr>
+                    <a href="login.html" id="authAction"><i class="fas fa-sign-in-alt"></i> Log in</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Shared sidebar fallback -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-btn" id="closeSidebar" title="Close Menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="sidebar-search-container">
+            <div class="search-bar" id="headerSearch">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search..." title="Press Ctrl+K or Cmd+K to search">
+                <div class="search-results" id="searchResults" style="display: none;"></div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <h3 class="nav-section-title">MAIN</h3>
+                <a href="#home" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
+                <a href="#trending" class="nav-item"><i class="fas fa-fire"></i><span>Trending</span></a>
+                <a href="#market" class="nav-item"><i class="fas fa-store"></i><span>Market</span></a>
+            </div>
+            <div class="nav-section">
+                <h3 class="nav-section-title">CONTENT CREATION</h3>
+                <a href="#podcast" class="nav-item"><i class="fas fa-microphone"></i><span>Podcast Automation</span></a>
+                <a href="#video" class="nav-item"><i class="fas fa-video"></i><span>Video Production</span></a>
+                <a href="#music" class="nav-item"><i class="fas fa-music"></i><span>Music Creation</span></a>
+            </div>
+            <div class="nav-section">
+                <h3 class="nav-section-title">EVENT ORGANIZATION</h3>
+                <a href="#performances" class="nav-item"><i class="fas fa-theater-masks"></i><span>Performances</span></a>
+                <a href="#parties" class="nav-item"><i class="fas fa-glass-cheers"></i><span>Parties</span></a>
+                <a href="#conferences" class="nav-item"><i class="fas fa-users"></i><span>Conferences</span></a>
+            </div>
+            <div class="nav-section">
+                <h3 class="nav-section-title">ACCESSORY</h3>
+                <a href="#workflows" class="nav-item"><i class="fas fa-diagram-project"></i><span>Workflows</span></a>
+                <a href="#analytics" class="nav-item"><i class="fas fa-chart-line"></i><span>Analytics</span></a>
+                <a href="#tutorials" class="nav-item"><i class="fas fa-graduation-cap"></i><span>Tutorials</span></a>
+            </div>
+        </nav>
+        <div class="sidebar-footer"></div>
+        <div class="sidebar-resize-handle" id="sidebarResizeHandle" title="Drag to resize sidebar"></div>
+    </aside>
+
+    <!-- Sidebar overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main-content container">
+        <section style="padding:40px 0;">
+            <div class="container">
+                <h1>Contact</h1>
+                <p>Founder: <strong>Chirui Huang</strong> — <a href="https://chirui.online" target="_blank" rel="noopener noreferrer">https://chirui.online</a></p>
+                <p>Email: <a href="mailto:optmo2public@gmail.com">optmo2public@gmail.com</a></p>
+                <p>Phone: <a href="tel:+15108597095">+1 510-859-7095</a></p>
+                <h2>Donations</h2>
+                <p>Support development via PayPal: <strong>optmo256@gmail.com</strong></p>
+                <p>Or sponsor via GitHub Sponsors: <a href="https://github.com/sponsors/Chirui-Huang">https://github.com/sponsors/Chirui-Huang</a></p>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -39,6 +39,15 @@ function getPreferredLanguage() {
     return 'en';
 }
 
+// Expose a global close function for other scripts to call
+function closeSidebarMenu() {
+    const sb = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (sb) sb.classList.remove('active');
+    if (overlay) overlay.classList.remove('active');
+    document.body.classList.remove('sidebar-open');
+}
+
 function setLanguage(lang) {
     if (!SUPPORTED_LANGUAGES.includes(lang)) return;
     localStorage.setItem('optmo_language', lang);
@@ -56,9 +65,10 @@ function getTranslations() {
             menuMain: 'MAIN',
             menuCreation: 'CONTENT CREATION',
             menuEvents: 'EVENT ORGANIZATION',
-            menuTools: 'TOOLS',
+            menuTools: 'ACCESSORY',
             home: 'Home',
             portfolio: 'Portfolio',
+            market: 'Market',
             trending: 'Trending',
             podcast: 'Podcast Automation',
             video: 'Video Production',
@@ -69,7 +79,8 @@ function getTranslations() {
             projects: 'My Projects',
             workflows: 'Workflows',
             analytics: 'Analytics',
-            heroTitle: 'Automate Your Content & Events',
+            tutorials: 'Tutorials',
+            heroTitle: 'Creative. Connected. Capitalized.',
             heroSubtitle: 'AI-powered workflows for podcasts, videos, music, and events - Save 90% of production time and focus on what matters',
             startTrial: "Let's collaborate",
             contactSales: 'Contact Sales',
@@ -89,6 +100,8 @@ function getTranslations() {
             dropdownMyAccount: 'My Account',
             dropdownSupport: 'Support OPTMO',
             dropdownLogout: 'Logout',
+            dropdownDashboard: 'My Dashboard',
+            dropdownSettings: 'Settings',
             devTitle: 'Site Under Development',
             devText: 'This website is still being developed. Some features may change or be unavailable. Not all content is finalized or accurate yet. Thank you for your patience!',
             automationTitle: 'How Automation Works',
@@ -118,7 +131,7 @@ function getTranslations() {
             serviceTitle6: 'Performance Analytics',
             aboutTitle: 'About Us',
             founderTitle: 'Founder',
-            founderText: 'OPTMO was founded by <strong><a href="https://chirui.online" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong>, a researcher in Operations, Information, and Technology. With a focus on practical automation solutions, Chirui created OPTMO to help creators and organizers streamline their workflows through intelligent tools.',
+            founderText: 'OPTMO was founded by <strong><a href="https://chirui.online" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong>.',
             visionTitle: 'Our Vision',
             visionHeading: 'What We\'re Building',
             visionText1: 'OPTMO is in active development as we build the future of content and event automation. Our goal is to help creators and organizers save time on repetitive tasks so they can focus on creativity and strategy. We\'re currently working on AI-powered tools for podcast production, video editing, music creation, and event management.',
@@ -141,7 +154,7 @@ function getTranslations() {
             footerResource2: 'Documentation',
             footerResource3: 'API Access',
             footerResource4: 'System Status',
-            footerBottom: '&copy; 2026 OPTMO. All rights reserved. | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms-of-service.html">Terms of Service</a> | <a href="cookie-policy.html">Cookie Policy</a>',
+            footerBottom: '<span style="color: var(--mustard);">&copy; 2026 OPTMO. All rights reserved. | <a href="privacy-policy.html" style="color: var(--mustard);">Privacy Policy</a> | <a href="terms-of-service.html" style="color: var(--mustard);">Terms of Service</a> | <a href="cookie-policy.html" style="color: var(--mustard);">Cookie Policy</a></span>',
             cookieTitle: 'Cookie Notice',
             cookieText: 'OPTMO uses essential cookies to operate this website. You may also consent to optional analytics cookies.',
             cookiePolicy: 'Privacy Policy',
@@ -250,7 +263,7 @@ function getTranslations() {
             projects: '我的项目',
             workflows: '工作流',
             analytics: '数据分析',
-            heroTitle: '自动化你的内容与活动',
+            heroTitle: 'Creative. Connected. Capitalized.',
             heroSubtitle: 'AI 驱动的播客、视频、音乐和活动工作流——节省 90% 制作时间，专注真正重要的事情',
             startTrial: '免费试用',
             contactSales: '联系销售',
@@ -331,7 +344,7 @@ function getTranslations() {
             enterpriseFeature6: '白标方案',
             aboutTitle: '关于我们',
             founderTitle: '创始人',
-            founderText: 'OPTMO 由 <strong><a href="https://chirui.online" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong> 创立，他是一位研究运营、信息与技术的学者。Chirui 专注于实用型自动化方案，创建 OPTMO 旨在帮助创作者与组织者通过智能工具优化工作流程。',
+            founderText: 'OPTMO 由 <strong><a href="https://chirui.online" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong> 创立。',
             visionTitle: '我们的愿景',
             visionHeading: '我们正在构建什么',
             visionText1: 'OPTMO 正在积极开发中，致力于构建内容与活动自动化的未来。我们的目标是帮助创作者和组织者节省重复性工作的时间，把精力投入到创意与策略中。我们正在推进播客制作、视频编辑、音乐创作与活动管理的 AI 工具。',
@@ -354,7 +367,7 @@ function getTranslations() {
             footerResource2: '文档',
             footerResource3: 'API 访问',
             footerResource4: '系统状态',
-            footerBottom: '&copy; 2026 OPTMO。保留所有权利。 | <a href="privacy-policy.html">隐私政策</a> | <a href="terms-of-service.html">服务条款</a> | <a href="cookie-policy.html">Cookie 政策</a>',
+            footerBottom: '<span style="color: var(--mustard);">&copy; 2026 OPTMO。保留所有权利。 | <a href="privacy-policy.html" style="color: var(--mustard);">隐私政策</a> | <a href="terms-of-service.html" style="color: var(--mustard);">服务条款</a> | <a href="cookie-policy.html" style="color: var(--mustard);">Cookie 政策</a></span>',
             cookieTitle: 'Cookie 通知',
             cookieText: 'OPTMO 使用必要 Cookie 以保证网站运行。您也可以同意启用可选的分析 Cookie。',
             cookiePolicy: '隐私政策',
@@ -464,7 +477,7 @@ function getTranslations() {
             projects: 'Mis Proyectos',
             workflows: 'Flujos de Trabajo',
             analytics: 'Analíticas',
-            heroTitle: 'Automatiza Tu Contenido y Eventos',
+            heroTitle: 'Creative. Connected. Capitalized.',
             heroSubtitle: 'Flujos de trabajo con IA para podcasts, videos, música y eventos. Ahorra 90% del tiempo de producción.',
             startTrial: 'Comenzar Prueba Gratis',
             contactSales: 'Contactar Ventas',
@@ -545,7 +558,7 @@ function getTranslations() {
             enterpriseFeature6: 'Opciones de marca blanca',
             aboutTitle: 'Sobre nosotros',
             founderTitle: 'Fundador',
-            founderText: 'OPTMO fue fundada por <strong><a href="https://chirui.online" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong>, investigador en Operaciones, Información y Tecnología. Con foco en soluciones prácticas de automatización, Chirui creó OPTMO para ayudar a creadores y organizadores a optimizar sus flujos con herramientas inteligentes.',
+            founderText: 'OPTMO fue fundada por <strong><a href="https://chirui.online" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong>.',
             visionTitle: 'Nuestra visión',
             visionHeading: 'Qué estamos construyendo',
             visionText1: 'OPTMO está en desarrollo activo mientras construimos el futuro de la automatización de contenido y eventos. Nuestro objetivo es ayudar a creadores y organizadores a ahorrar tiempo en tareas repetitivas para enfocarse en creatividad y estrategia. Actualmente trabajamos en herramientas con IA para podcast, video, música y gestión de eventos.',
@@ -568,7 +581,7 @@ function getTranslations() {
             footerResource2: 'Documentación',
             footerResource3: 'Acceso API',
             footerResource4: 'Estado del sistema',
-            footerBottom: '&copy; 2026 OPTMO. Todos los derechos reservados. | <a href="privacy-policy.html">Política de privacidad</a> | <a href="terms-of-service.html">Términos de servicio</a> | <a href="cookie-policy.html">Política de cookies</a>',
+            footerBottom: '<span style="color: var(--mustard);">&copy; 2026 OPTMO. Todos los derechos reservados. | <a href="privacy-policy.html" style="color: var(--mustard);">Política de privacidad</a> | <a href="terms-of-service.html" style="color: var(--mustard);">Términos de servicio</a> | <a href="cookie-policy.html" style="color: var(--mustard);">Política de cookies</a></span>',
             cookieTitle: 'Aviso de cookies',
             cookieText: 'OPTMO utiliza cookies esenciales para operar este sitio web. También puedes consentir cookies analíticas opcionales.',
             cookiePolicy: 'Política de privacidad',
@@ -870,6 +883,83 @@ function getTranslations() {
     };
 }
 
+/* Partials injector: load shared header/sidebar/footer from /partials/ and replace or insert on every page */
+async function loadSharedPartials() {
+    const base = window.location.origin + window.location.pathname.replace(/[^/]+$/, '');
+    const partialPaths = {
+        header: 'partials/header.html',
+        sidebar: 'partials/sidebar.html',
+        footer: 'partials/footer.html'
+    };
+
+    async function fetchPartial(path) {
+        try {
+            const res = await fetch(path, {cache: 'no-store'});
+            if (!res.ok) return null;
+            return await res.text();
+        } catch (e) {
+            console.warn('Failed to fetch partial', path, e);
+            return null;
+        }
+    }
+
+    const headerHTML = await fetchPartial(partialPaths.header);
+    const sidebarHTML = await fetchPartial(partialPaths.sidebar);
+    const footerHTML = await fetchPartial(partialPaths.footer);
+
+    if (headerHTML) {
+        const existing = document.querySelector('.top-header');
+        if (existing) existing.outerHTML = headerHTML;
+        else document.body.insertAdjacentHTML('afterbegin', headerHTML);
+    }
+
+    if (sidebarHTML) {
+        const main = document.querySelector('main') || document.querySelector('.main-content') || document.body;
+        const existing = document.querySelector('.sidebar');
+        if (existing) existing.outerHTML = sidebarHTML;
+        else main.insertAdjacentHTML('beforebegin', sidebarHTML);
+    }
+
+    // Ensure there's a sidebar overlay element on every page so the toggle can work
+    if (!document.getElementById('sidebarOverlay')) {
+        const footerEl = document.querySelector('.footer');
+        const overlayHTML = '<div class="sidebar-overlay" id="sidebarOverlay"></div>';
+        if (footerEl && footerEl.parentElement) {
+            footerEl.insertAdjacentHTML('beforebegin', overlayHTML);
+        } else {
+            document.body.insertAdjacentHTML('beforeend', overlayHTML);
+        }
+    }
+
+    if (footerHTML) {
+        const existing = document.querySelector('.footer');
+        const main = document.querySelector('main') || document.querySelector('.main-content') || document.body;
+        if (existing) {
+            existing.outerHTML = footerHTML;
+        } else {
+            // Insert footer after main so it's not constrained by page-level containers
+            if (main && main.parentElement) {
+                main.insertAdjacentHTML('afterend', footerHTML);
+            } else {
+                document.body.insertAdjacentHTML('beforeend', footerHTML);
+            }
+        }
+
+        // Ensure footer lives at the end of the document body so it matches homepage layout
+        const injectedFooter = document.querySelector('.footer');
+        if (injectedFooter && injectedFooter.parentElement !== document.body) {
+            document.body.appendChild(injectedFooter);
+        }
+    }
+
+    // Re-run any init that expects these elements
+    if (typeof initUI === 'function') initUI();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadSharedPartials();
+});
+
 function applySystemLanguage() {
     const language = getPreferredLanguage();
     const translations = getTranslations();
@@ -905,12 +995,26 @@ function applySystemLanguage() {
     setAttr('#sidebarToggle', 'title', t.menuMain);
     setAttr('#closeSidebar', 'title', t.menuMain);
 
+    const authAction = document.getElementById('authAction');
     const dropdownLinks = document.querySelectorAll('#dropdownMenu a');
-    if (dropdownLinks[0]) dropdownLinks[0].innerHTML = `<i class="fas fa-sign-in-alt"></i> ${t.dropdownLogin}`;
-    if (dropdownLinks[1]) dropdownLinks[1].innerHTML = `<i class="fas fa-user"></i> ${t.dropdownMyAccount}`;
-    if (dropdownLinks[2]) dropdownLinks[2].innerHTML = `<i class="fas fa-crown"></i> ${t.dropdownUpgrade}`;
+    if (dropdownLinks[0]) dropdownLinks[0].innerHTML = `<i class="fas fa-user"></i> ${t.dropdownMyAccount}`;
+    if (dropdownLinks[1]) dropdownLinks[1].innerHTML = `<i class="fas fa-tachometer-alt"></i> ${t.dropdownDashboard}`;
+    if (dropdownLinks[2]) dropdownLinks[2].innerHTML = `<i class="fas fa-cog"></i> ${t.dropdownSettings}`;
     if (dropdownLinks[3]) dropdownLinks[3].innerHTML = `<i class="fas fa-heart"></i> ${t.dropdownSupport}`;
-    if (dropdownLinks[4]) dropdownLinks[4].innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.dropdownLogout}`;
+
+    // Toggle auth action: Log in when not logged in, Logout when logged in
+    const isLoggedIn = !!localStorage.getItem('optmo_logged_in');
+    if (authAction) {
+        if (isLoggedIn) {
+            authAction.innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.dropdownLogout}`;
+            authAction.setAttribute('href', '#');
+            authAction.setAttribute('onclick', 'logoutFromHome()');
+        } else {
+            authAction.innerHTML = `<i class="fas fa-sign-in-alt"></i> ${t.dropdownLogin}`;
+            authAction.setAttribute('href', 'login.html');
+            authAction.removeAttribute('onclick');
+        }
+    }
 
     const navTitles = document.querySelectorAll('.nav-section-title');
     if (navTitles[0]) navTitles[0].textContent = t.menuMain;
@@ -920,17 +1024,17 @@ function applySystemLanguage() {
 
     const navItems = document.querySelectorAll('.sidebar-nav .nav-item span');
     if (navItems[0]) navItems[0].textContent = t.home;
-    if (navItems[1]) navItems[1].textContent = t.portfolio;
-    if (navItems[2]) navItems[2].textContent = t.trending;
+    if (navItems[1]) navItems[1].textContent = t.trending;
+    if (navItems[2]) navItems[2].textContent = t.market;
     if (navItems[3]) navItems[3].textContent = t.podcast;
     if (navItems[4]) navItems[4].textContent = t.video;
     if (navItems[5]) navItems[5].textContent = t.music;
     if (navItems[6]) navItems[6].textContent = t.performances;
     if (navItems[7]) navItems[7].textContent = t.parties;
     if (navItems[8]) navItems[8].textContent = t.conferences;
-    if (navItems[9]) navItems[9].textContent = t.projects;
-    if (navItems[10]) navItems[10].textContent = t.workflows;
-    if (navItems[11]) navItems[11].textContent = t.analytics;
+    if (navItems[9]) navItems[9].textContent = t.workflows;
+    if (navItems[10]) navItems[10].textContent = t.analytics;
+    if (navItems[11]) navItems[11].textContent = t.tutorials;
 
     const premiumTitle = document.querySelector('.premium-box h4');
     if (premiumTitle) premiumTitle.innerHTML = `<i class="fas fa-crown"></i> ${t.premiumTitle}`;
@@ -1329,7 +1433,7 @@ class SmartSearch {
             matches.forEach(match => {
                 this.highlightText(match.element, searchTerm);
                 if (match.type === 'project') {
-                    match.element.style.backgroundColor = 'rgba(128, 0, 32, 0.08)';
+                    match.element.style.backgroundColor = 'rgba(139, 58, 43, 0.08)';
                 }
             });
             
@@ -1735,60 +1839,64 @@ function initSearchBar() {
     }
 }
 
-// Sidebar Toggle
-const sidebarToggle = document.getElementById('sidebarToggle');
-const sidebar = document.getElementById('sidebar');
-const sidebarOverlay = document.getElementById('sidebarOverlay');
-const closeSidebar = document.getElementById('closeSidebar');
+// Initialize interactive UI (sidebar, account dropdown)
+function initUI() {
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const closeSidebar = document.getElementById('closeSidebar');
 
-function closeSidebarMenu() {
-    if (sidebar) {
-        sidebar.classList.remove('active');
+    function closeSidebarMenu() {
+        const sb = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sb) sb.classList.remove('active');
+        if (overlay) overlay.classList.remove('active');
+        document.body.classList.remove('sidebar-open');
     }
+
+    // Ensure sidebar starts closed
+    closeSidebarMenu();
+
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+            const sb = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (!sb || !overlay) return;
+            sb.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.classList.toggle('sidebar-open');
+        });
+    }
+
+    if (closeSidebar) {
+        closeSidebar.addEventListener('click', () => {
+            closeSidebarMenu();
+        });
+    }
+
     if (sidebarOverlay) {
-        sidebarOverlay.classList.remove('active');
+        sidebarOverlay.addEventListener('click', () => {
+            closeSidebarMenu();
+        });
     }
-    document.body.classList.remove('sidebar-open');
-}
 
-closeSidebarMenu();
+    // Account Menu Toggle
+    const accountBtn = document.getElementById('accountBtn');
+    const dropdownMenu = document.getElementById('dropdownMenu');
 
-if (sidebarToggle) {
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
-        sidebarOverlay.classList.toggle('active');
-        document.body.classList.toggle('sidebar-open');
-    });
-}
+    if (accountBtn && dropdownMenu) {
+        accountBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('active');
+        });
 
-if (closeSidebar) {
-    closeSidebar.addEventListener('click', () => {
-        closeSidebarMenu();
-    });
-}
-
-if (sidebarOverlay) {
-    sidebarOverlay.addEventListener('click', () => {
-        closeSidebarMenu();
-    });
-}
-
-// Account Menu Toggle
-const accountBtn = document.getElementById('accountBtn');
-const dropdownMenu = document.getElementById('dropdownMenu');
-
-if (accountBtn && dropdownMenu) {
-    accountBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdownMenu.classList.toggle('active');
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.account-menu')) {
-            dropdownMenu.classList.remove('active');
-        }
-    });
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.account-menu')) {
+                dropdownMenu.classList.remove('active');
+            }
+        });
+    }
 }
 
 // Active Nav Item on Scroll
@@ -2185,7 +2293,7 @@ function initContactForm() {
         } catch (error) {
             console.error('Form submission error:', error);
             submitBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error - Try Again';
-            submitBtn.style.background = '#ef4444';
+            submitBtn.style.background = 'var(--primary-color)';
             if (statusEl) {
                 statusEl.textContent = 'Unable to send message. Please email optmo2public@gmail.com directly.';
             }
