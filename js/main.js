@@ -983,6 +983,31 @@ async function loadSharedPartials() {
     // Ensure search initializes after partials are injected
     if (typeof updateSearchSuggestions === 'function') updateSearchSuggestions();
     if (typeof initSearchBar === 'function') initSearchBar();
+    // Highlight current page in sidebar
+    if (typeof setActiveSidebarLink === 'function') setActiveSidebarLink();
+}
+
+// Set the active class on sidebar nav items based on current URL
+function setActiveSidebarLink() {
+    try {
+        const sidebar = document.querySelector('.sidebar');
+        if (!sidebar) return;
+        const links = sidebar.querySelectorAll('.nav-item');
+        const current = (window.location.pathname || '').split('/').pop() || 'index.html';
+
+        links.forEach(a => {
+            a.classList.remove('active');
+            const href = a.getAttribute('href') || '';
+            const linkFile = href.split('?')[0].split('#')[0].split('/').pop();
+            if (!linkFile) return;
+            // Treat index and root equivalently
+            if ((linkFile === 'index.html' && (current === '' || current === 'index.html')) || linkFile === current) {
+                a.classList.add('active');
+            }
+        });
+    } catch (e) {
+        console.warn('setActiveSidebarLink error', e);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

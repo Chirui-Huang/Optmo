@@ -1197,10 +1197,110 @@ mark.search-highlight.current {
     box-shadow: 0 10px 20px rgba(163, 102, 47, 0.28);
 }
 
+/* Ensure anchor-based buttons behave like buttons and remain clickable */
+.cta-button, .secondary-button {
+    display: inline-block;
+    text-decoration: none;
+    line-height: 1;
+    vertical-align: middle;
+    pointer-events: auto;
+}
+
+.secondary-button {
+    padding: 10px 18px;
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: none;
+}
+
+.secondary-button:hover {
+    background: var(--primary-color);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+/* Force high-contrast defaults for anchor buttons to avoid inheritance issues */
+.cta-button {
+    background: var(--accent-wood) !important;
+    color: var(--white) !important;
+    border: none !important;
+}
+
+.cta-button:focus, .cta-button:active {
+    outline: 2px solid rgba(255,255,255,0.08);
+}
+
 /* Featured Section */
 .featured-section {
     padding: 60px 20px;
     background: var(--white);
+}
+
+/* Marketplace listing styles */
+.listing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    align-items: stretch;
+}
+
+.listing-card {
+    background: var(--white);
+    border: 1px solid var(--neutral-border);
+    border-radius: 8px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 340px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+}
+
+.listing-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: var(--primary-dark);
+}
+
+.listing-card p, .listing-card ul, .listing-card small {
+    color: var(--text-dark);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.listing-card ul {
+    margin: 8px 0 0 18px;
+}
+
+.listing-demos {
+    margin-top: 10px;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.card-actions .cta-button {
+    flex: 1 1 auto;
+    padding: 10px 14px;
+    text-align: center;
+}
+
+.card-actions .secondary-button {
+    flex: 1 1 auto;
+}
+
+@media (max-width: 720px) {
+    .listing-grid { grid-template-columns: 1fr; }
+    .listing-card { min-height: auto; }
+    .card-actions { flex-direction: column; }
 }
 
 .section-title {
