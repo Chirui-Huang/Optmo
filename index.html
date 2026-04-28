@@ -85,13 +85,11 @@
                     <span>Account</span>
                 </button>
                 <div class="dropdown-menu" id="dropdownMenu">
-                    <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
                     <a href="account.html"><i class="fas fa-user"></i> My Account</a>
+                    <a href="account.html"><i class="fas fa-tachometer-alt"></i> My Dashboard</a>
+                    <a href="account.html#settings"><i class="fas fa-cog"></i> Settings</a>
                     <hr>
-                    <a href="#pricing"><i class="fas fa-crown"></i> Upgrade to Pro</a>
-                    <a href="donate.html"><i class="fas fa-heart"></i> Support OPTMO</a>
-                    <hr>
-                    <a href="#home" onclick="logoutFromHome()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a href="login.html" id="authAction"><i class="fas fa-sign-in-alt"></i> Log in</a>
                 </div>
             </div>
         </div>
@@ -118,31 +116,35 @@
             <!-- Search Bar is already above nav-section -->
             <div class="nav-section">
                 <h3 class="nav-section-title">MAIN</h3>
-                <a href="#home" class="nav-item active">
+                <a href="index.html" class="nav-item active">
                     <i class="fas fa-home"></i>
                     <span>Home</span>
                 </a>
-                <a href="#trending" class="nav-item">
+                <a href="trending.html" class="nav-item">
                     <i class="fas fa-fire"></i>
                     <span>Trending</span>
                 </a>
-                <a href="marketplace.html" class="nav-item">
-                    <i class="fas fa-exchange-alt"></i>
-                    <span>Exchange</span>
+                <a href="market.html" class="nav-item">
+                    <i class="fas fa-store"></i>
+                    <span>Market</span>
+                </a>
+                <a href="community.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Community</span>
                 </a>
             </div>
 
             <div class="nav-section">
                 <h3 class="nav-section-title">CONTENT CREATION</h3>
-                <a href="#podcast" class="nav-item">
+                <a href="podcast-automation.html" class="nav-item">
                     <i class="fas fa-microphone"></i>
                     <span>Podcast Automation</span>
                 </a>
-                <a href="#video" class="nav-item">
+                <a href="video-production.html" class="nav-item">
                     <i class="fas fa-video"></i>
                     <span>Video Production</span>
                 </a>
-                <a href="#music" class="nav-item">
+                <a href="music-creation.html" class="nav-item">
                     <i class="fas fa-music"></i>
                     <span>Music Creation</span>
                 </a>
@@ -150,37 +152,33 @@
 
             <div class="nav-section">
                 <h3 class="nav-section-title">EVENT ORGANIZATION</h3>
-                <a href="#party" class="nav-item">
-                    <i class="fas fa-glass-cheers"></i>
-                    <span>Party</span>
-                </a>
-                <a href="#performance" class="nav-item">
+                <a href="performances.html" class="nav-item">
                     <i class="fas fa-theater-masks"></i>
-                    <span>Performance</span>
+                    <span>Performances</span>
                 </a>
-                <a href="#conference" class="nav-item">
+                <a href="parties.html" class="nav-item">
+                    <i class="fas fa-glass-cheers"></i>
+                    <span>Parties</span>
+                </a>
+                <a href="conferences.html" class="nav-item">
                     <i class="fas fa-users"></i>
-                    <span>Conference</span>
+                    <span>Conferences</span>
                 </a>
             </div>
 
             <div class="nav-section">
                 <h3 class="nav-section-title">ACCESSORY</h3>
-                <a href="#workflow" class="nav-item">
+                <a href="workflow-management.html" class="nav-item">
                     <i class="fas fa-diagram-project"></i>
-                    <span>Workflow</span>
+                    <span>Workflows</span>
                 </a>
-                <a href="#analysis" class="nav-item">
+                <a href="analytics.html" class="nav-item">
                     <i class="fas fa-chart-line"></i>
-                    <span>Analysis</span>
+                    <span>Analytics</span>
                 </a>
-                <a href="#promotion" class="nav-item">
-                    <i class="fas fa-bullhorn"></i>
-                    <span>Promotion</span>
-                </a>
-                <a href="#tutorial" class="nav-item">
+                <a href="tutorials.html" class="nav-item">
                     <i class="fas fa-graduation-cap"></i>
-                    <span>Tutorial</span>
+                    <span>Tutorials</span>
                 </a>
             </div>
         </nav>
@@ -202,7 +200,7 @@
                     <h1>Automate Your Content & Events</h1>
                     <p>AI-powered workflows for podcasts, videos, music, and events - Save 90% of production time and focus on what matters</p>
                     <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 32px;">
-                        <button class="cta-button" onclick="window.location.href='#contact'">Let's collaborate</button>
+                        <button class="cta-button" onclick="window.location.href='community.html'">Join Community</button>
                     </div>
                 </div>
             </div>
@@ -325,7 +323,7 @@
                     <h3><i class="fas fa-user-tie"></i> Founder</h3>
                     <div style="padding: 20px 0;">
                         <p style="font-size: 16px; line-height: 1.8; color: var(--text-dark);">
-                            OPTMO was founded by <strong><a href="https://fredykraft.github.io/Chirui" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong>, 
+                            OPTMO was founded by <strong><a href="https://chirui.online" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); text-decoration: none; border-bottom: 2px solid var(--primary-color); transition: all 0.2s;">Chirui Huang</a></strong>, 
                             a researcher in Operations, Information, and Technology. 
                             With a focus on practical automation solutions, Chirui created OPTMO to help creators and organizers streamline their workflows through intelligent tools.
                         </p>
@@ -389,40 +387,49 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="container">
+                <div class="footer-slogan" style="text-align:center; margin-bottom:18px;">
+                    <strong>Creative. Connected. Capitalized.</strong>
+                </div>
                 <div class="footer-content">
-                    <div class="footer-section">
-                        <h5>OPTMO</h5>
-                        <p>AI-powered automation for content creation and event organization. Save time, create more.</p>
-                    </div>
-                    <div class="footer-section">
-                        <h5>Services</h5>
-                        <ul>
-                            <li><a href="#podcast">Podcast Creation</a></li>
-                            <li><a href="#video">Video Production</a></li>
-                            <li><a href="#music">Music Creation</a></li>
-                            <li><a href="#performance">Event Organization</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-section">
-                        <h5>Company</h5>
-                        <ul>
-                            <li><a href="#about">About Us</a></li>
-                            <li><a href="#portfolio">Projects</a></li>
-                            <li><a href="#home">Get Started</a></li>
-                            <li><a href="donate.html">Support OPTMO</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-section">
-                        <h5>Resources</h5>
-                        <ul>
-                            <li><a href="#home">Help Center</a></li>
-                            <li><a href="#about">Documentation</a></li>
-                            <li><a href="#about">System Status</a></li>
-                        </ul>
+                    <div class="footer-grid">
+                        <div class="footer-col">
+                            <h5 class="footer-title">Get Creative</h5>
+                            <a href="new-releases.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">New Releases</a>
+                            <a href="podcast-automation.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Podcast Automation</a>
+                            <a href="video-production.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Video Production</a>
+                            <a href="music-creation.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Music Creation</a>
+                            <a href="event-organization.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Event Organization</a>
+                            <a href="workflow-management.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Workflow Management</a>
+                            <a href="activity-analytics.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Activity Analytics</a>
+                        </div>
+                        <div class="footer-col">
+                            <h5 class="footer-title">Connect</h5>
+                            <a href="online-community.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Online Community</a>
+                            <a href="offline-gatherings.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Offline Gatherings</a>
+                        </div>
+                        <div class="footer-col">
+                            <h5 class="footer-title">Monetize</h5>
+                            <a href="online-exchange.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Online Exchange</a>
+                            <a href="auction-center.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Auction Center</a>
+                        </div>
+                        <div class="footer-col">
+                            <h5 class="footer-title">About OPTMO</h5>
+                            <a href="proud-display.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Proud Display</a>
+                            <a href="optmo-leadership.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">OPTMO Leadership</a>
+                            <a href="careers.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Career Opportunities</a>
+                            <a href="contact-optmo.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Contact OPTMO</a>
+                            <a href="support-collaboration.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Support &amp; Collaboration</a>
+                        </div>
+                        <div class="footer-col">
+                            <h5 class="footer-title">Safe &amp; Secure</h5>
+                            <a href="privacy-policy.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Privacy Protection</a>
+                            <a href="copyright.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Copyright</a>
+                            <a href="transaction-safety.html" class="footer-link" style="color: var(--mustard) !important; text-decoration: none !important;">Transaction Safety</a>
+                        </div>
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <p>&copy; 2026 OPTMO. All rights reserved. | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms-of-service.html">Terms of Service</a> | <a href="cookie-policy.html">Cookie Policy</a></p>
+                    <p style="margin:0; color: var(--mustard);">&copy; 2026 OPTMO. All rights reserved.</p>
                 </div>
             </div>
         </footer>
@@ -441,10 +448,9 @@
 
     <!-- Cookie Consent Notice -->
     <div class="cookie-notice" id="cookieNotice">
-        <p>
+            <p>
             <strong>Cookie Notice</strong><br>
             OPTMO uses essential cookies to operate this website. You may also consent to optional analytics cookies.
-            <a href="privacy-policy.html">Privacy Policy</a>
         </p>
         <div class="cookie-buttons">
             <button class="cookie-btn decline" id="declineCookies">Essential Only</button>
@@ -452,7 +458,7 @@
         </div>
     </div>
 
-    <script src="js/main.js"></script>
+    <script src="js/main.js" defer></script>
 
 </body>
 </html>

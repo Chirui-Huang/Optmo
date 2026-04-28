@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Podcast Production | OPTMO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .podcast-page { padding: 28px 20px; }
+        .podcast-grid { display:grid; grid-template-columns: 1fr 360px; gap: 24px; }
+        .workflow-steps { background: var(--white); padding: 18px; border-radius:8px; border:1px solid var(--neutral-border); }
+        .intake-panel { background: var(--neutral-light); padding: 18px; border-radius:8px; }
+        .intake-row { margin-bottom: 12px; }
+        label { display:block; font-weight:600; margin-bottom:6px; }
+        input[type="text"], textarea, select { width:100%; padding:8px 10px; border:1px solid var(--neutral-border); border-radius:6px; }
+        textarea { min-height: 120px; }
+    </style>
+</head>
+<body>
+    <main class="main-content podcast-page">
+        <div class="container">
+            <h1>Podcast Production Workflow</h1>
+            <p class="lead">Use this page to collect episode briefs and start the production process.</p>
+
+            <div class="podcast-grid">
+                <div class="workflow-steps">
+                    <h2>Workflow Overview</h2>
+                    <ol>
+                        <li>Client submits episode brief and raw files (link to cloud storage).</li>
+                        <li>We perform editing: remove pauses, noise reduction, level and finalize.</li>
+                        <li>Client reviews rough edit and requests revisions.</li>
+                        <li>We deliver final master (WAV + MP3) and show notes.</li>
+                    </ol>
+
+                    <h3>Deliverables</h3>
+                    <ul>
+                        <li>Edited WAV master</li>
+                        <li>MP3 for hosting</li>
+                        <li>Show notes + timestamps</li>
+                        <li>Optional: audiogram / social clip</li>
+                    </ul>
+
+                    <h3>Starter Package</h3>
+                    <p>$50 — basic edit, 1 revision, 48-hour turnaround.</p>
+                </div>
+
+                <aside class="intake-panel">
+                    <h3>Episode Intake</h3>
+                    <p>Quickly collect basic info and a link to raw audio.</p>
+                    <div class="intake-row">
+                        <label>Episode Title</label>
+                        <input type="text" id="epTitle" placeholder="Episode title">
+                    </div>
+                    <div class="intake-row">
+                        <label>Host / Guests</label>
+                        <input type="text" id="epPeople" placeholder="Host and guests">
+                    </div>
+                    <div class="intake-row">
+                        <label>Raw Files (share link)</label>
+                        <input type="text" id="epFiles" placeholder="Dropbox / Google Drive / S3 link">
+                    </div>
+                    <div class="intake-row">
+                        <label>Preferred Delivery Date</label>
+                        <input type="text" id="epDate" placeholder="YYYY-MM-DD">
+                    </div>
+                    <div class="intake-row">
+                        <label>Notes / Edit Instructions</label>
+                        <textarea id="epNotes" placeholder="Timestamps, removes, special instructions"></textarea>
+                    </div>
+                    <div style="display:flex;gap:8px;margin-top:10px;">
+                        <button type="button" class="cta-button" id="requestPackage">Request Starter Package</button>
+                        <button type="button" class="secondary-button" id="emailBrief">Email Brief</button>
+                    </div>
+
+                    <p id="podcastActionStatus" style="margin-top:10px;color:var(--text-light);font-size:13px;"></p>
+
+                    <script>
+                        function getPodcastBrief() {
+                            return {
+                                title: (document.getElementById('epTitle').value || '').trim(),
+                                people: (document.getElementById('epPeople').value || '').trim(),
+                                files: (document.getElementById('epFiles').value || '').trim(),
+                                date: (document.getElementById('epDate').value || '').trim(),
+                                notes: (document.getElementById('epNotes').value || '').trim()
+                            };
+                        }
+
+                        function showPodcastStatus(message, isError = false) {
+                            const statusEl = document.getElementById('podcastActionStatus');
+                            if (!statusEl) return;
+                            statusEl.textContent = message;
+                            statusEl.style.color = isError ? '#b91c1c' : 'var(--text-light)';
+                        }
+
+                        document.getElementById('requestPackage').addEventListener('click', function(){
+                            const brief = getPodcastBrief();
+                            if (!brief.title || !brief.files) {
+                                showPodcastStatus('Please provide Episode Title and Raw Files link before requesting a package.', true);
+                                return;
+                            }
+
+                            const subject = encodeURIComponent('Order: Podcast Editing Starter Package');
+                            const bodyText = [
+                                "Hi,",
+                                "",
+                                "I'd like to order the Podcast Editing Starter Package.",
+                                "",
+                                `Title: ${brief.title}`,
+                                `Host / Guests: ${brief.people || '[Not provided]'}`,
+                                `Files: ${brief.files}`,
+                                `Preferred date: ${brief.date || '[Not provided]'}`,
+                                `Notes: ${brief.notes || '[None]'}`,
+                                "",
+                                "Thanks,",
+                                "[Your name]"
+                            ].join('\n');
+
+                            window.location.href = `mailto:optmo256@gmail.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
+                        });
+
+                        document.getElementById('emailBrief').addEventListener('click', function(){
+                            const brief = getPodcastBrief();
+                            const safeTitle = brief.title || 'Untitled Episode';
+                            const subject = encodeURIComponent(`Episode Brief: ${safeTitle}`);
+                            const bodyText = [
+                                'Episode brief:',
+                                '',
+                                `Title: ${safeTitle}`,
+                                `Host / Guests: ${brief.people || '[Not provided]'}`,
+                                `Files: ${brief.files || '[Not provided]'}`,
+                                `Preferred date: ${brief.date || '[Not provided]'}`,
+                                'Notes:',
+                                brief.notes || '[None]'
+                            ].join('\n');
+
+                            window.location.href = `mailto:optmo256@gmail.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
+                        });
+                    </script>
+                </aside>
+            </div>
+        </div>
+    </main>
+    <script src="js/main.js"></script>
+</body>
+</html>

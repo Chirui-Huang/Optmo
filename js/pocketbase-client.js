@@ -3,14 +3,23 @@
  * Initialize PocketBase connection and user management
  */
 
-// PocketBase URL (change to your deployment URL when hosting)
-const POCKETBASE_URL = 'http://localhost:8090';
+// PocketBase URL supports runtime config and safe defaults.
+// Set window.OPTMO_CONFIG.pocketbaseUrl in production if backend is on a different origin.
+const POCKETBASE_URL =
+    (window.OPTMO_CONFIG && window.OPTMO_CONFIG.pocketbaseUrl) ||
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:8090'
+        : window.location.origin);
 
 // Initialize PocketBase
 let pb;
 
 // Wait for PocketBase SDK to load
 function initPocketBase() {
+    if (pb) {
+        return true;
+    }
+
     if (typeof PocketBase === 'undefined') {
         console.error('PocketBase SDK not loaded');
         return false;
@@ -91,6 +100,9 @@ async function loginUser(email, password) {
 function getCurrentUser() {
     try {
         if (!pb) initPocketBase();
+        if (!pb || !pb.authStore || !pb.authStore.isValid) {
+            return null;
+        }
         return pb.authStore.record;
     } catch (error) {
         console.error('Get user error:', error);
@@ -311,6 +323,208 @@ async function getUserAnalytics(userId) {
         return { success: true, analytics: analytics };
     } catch (error) {
         console.error('Get analytics error:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+/**
+ * COMMUNITY FUNCTIONS
+ */
+
+// Create community post
+async function createCommunityPost(userId, title, content, category = 'general', tags = []) {
+    try {
+        if (!pb) initPocketBase();
+
+        const post = await pb.collection('community_posts').create({
+            user: userId,
+            title: title,
+            content: content,
+            category: category,
+            tags: tags
+        });
+
+        await trackEvent(userId, 'community_post_created', {
+            post_id: post.id,
+            category: category
+        });
+
+        return { success: true, post: post };
+    } catch (error) {
+        console.error('Create community post error:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+function escapePocketBaseFilterValue(value) {
+    return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+// Get public community feed
+async function getCommunityFeed(limit = 30, options = {}) {
+    try {
+        if (!pb) initPocketBase();
+
+        const category = options.category || 'all';
+        const search = (options.search || '').trim();
+        const filters = [];
+
+        if (category && category !== 'all') {
+            filters.push(`category = "${escapePocketBaseFilterValue(category)}"`);
+        }
+
+        if (search) {
+            const safeSearch = escapePocketBaseFilterValue(search);
+            filters.push(`(title ~ "${safeSearch}" || content ~ "${safeSearch}" || tags ~ "${safeSearch}")`);
+        }
+
+        const posts = await pb.collection('community_posts').getList(1, limit, {
+            sort: '-created',
+            expand: 'user',
+            fields: 'id,title,content,category,tags,created,user,expand.user.name,expand.user.email',
+            filter: filters.length ? filters.join(' && ') : undefined
+        });
+
+        return { success: true, posts: posts.items || [] };
+    } catch (error) {
+        console.error('Get community feed error:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+// Create comment for a community post
+async function createCommunityComment(userId, postId, content) {
+    try {
+        if (!pb) initPocketBase();
+
+        const comment = await pb.collection('community_comments').create({
+            user: userId,
+            post: postId,
+            content: content
+        });
+
+        await trackEvent(userId, 'community_comment_created', {
+            post_id: postId,
+            comment_id: comment.id
+        });
+
+        return { success: true, comment: comment };
+    } catch (error) {
+        console.error('Create community comment error:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+// Get comments for a set of posts
+async function getCommunityCommentsForPosts(postIds = []) {
+    try {
+        if (!pb) initPocketBase();
+        if (!Array.isArray(postIds) || postIds.length === 0) {
+            return { success: true, commentsByPost: {} };
+        }
+
+        const safeIds = postIds.filter(Boolean).slice(0, 80);
+        const filter = safeIds
+            .map((id) => `post = "${escapePocketBaseFilterValue(id)}"`)
+            .join(' || ');
+
+        const comments = await pb.collection('community_comments').getFullList({
+            sort: 'created',
+            expand: 'user',
+            fields: 'id,post,content,created,user,expand.user.name,expand.user.email',
+            filter: filter
+        });
+
+        const commentsByPost = {};
+        comments.forEach((comment) => {
+            const postId = comment.post;
+            if (!commentsByPost[postId]) commentsByPost[postId] = [];
+            commentsByPost[postId].push(comment);
+        });
+
+        return { success: true, commentsByPost: commentsByPost };
+    } catch (error) {
+        console.error('Get community comments error:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+// Toggle a like reaction on a post
+async function toggleCommunityReaction(userId, postId, type = 'like') {
+    try {
+        if (!pb) initPocketBase();
+
+        const safeUser = escapePocketBaseFilterValue(userId);
+        const safePost = escapePocketBaseFilterValue(postId);
+        const safeType = escapePocketBaseFilterValue(type);
+
+        try {
+            const existing = await pb.collection('community_reactions').getFirstListItem(
+                `user = "${safeUser}" && post = "${safePost}" && type = "${safeType}"`
+            );
+
+            await pb.collection('community_reactions').delete(existing.id);
+            return { success: true, active: false };
+        } catch (_) {
+            const reaction = await pb.collection('community_reactions').create({
+                user: userId,
+                post: postId,
+                type: type
+            });
+
+            await trackEvent(userId, 'community_reaction_created', {
+                post_id: postId,
+                reaction_type: type,
+                reaction_id: reaction.id
+            });
+
+            return { success: true, active: true };
+        }
+    } catch (error) {
+        console.error('Toggle community reaction error:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+// Get reaction summary for a set of posts
+async function getCommunityReactionSummary(postIds = [], currentUserId = null) {
+    try {
+        if (!pb) initPocketBase();
+        if (!Array.isArray(postIds) || postIds.length === 0) {
+            return { success: true, summaryByPost: {} };
+        }
+
+        const safeIds = postIds.filter(Boolean).slice(0, 80);
+        const filter = safeIds
+            .map((id) => `post = "${escapePocketBaseFilterValue(id)}"`)
+            .join(' || ');
+
+        const reactions = await pb.collection('community_reactions').getFullList({
+            filter: filter,
+            fields: 'id,post,user,type'
+        });
+
+        const summaryByPost = {};
+        reactions.forEach((reaction) => {
+            const postId = reaction.post;
+            if (!summaryByPost[postId]) {
+                summaryByPost[postId] = {
+                    likeCount: 0,
+                    likedByCurrentUser: false
+                };
+            }
+
+            if (reaction.type === 'like') {
+                summaryByPost[postId].likeCount += 1;
+                if (currentUserId && reaction.user === currentUserId) {
+                    summaryByPost[postId].likedByCurrentUser = true;
+                }
+            }
+        });
+
+        return { success: true, summaryByPost: summaryByPost };
+    } catch (error) {
+        console.error('Get community reaction summary error:', error);
         return { success: false, error: error.message };
     }
 }

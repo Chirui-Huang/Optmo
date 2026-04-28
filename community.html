@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OPTMO Community - connect, share, and collaborate">
+    <title>Community | OPTMO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .community-wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 20px 48px;
+        }
+
+        .community-hero {
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(160, 102, 47, 0.12), rgba(139, 58, 43, 0.08));
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .community-hero h1 {
+            margin: 0;
+            font-size: 32px;
+            color: var(--text-dark);
+        }
+
+        .community-hero p {
+            margin: 8px 0 0;
+            color: var(--grey-dark);
+        }
+
+        .community-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 6px 22px rgba(0, 0, 0, 0.06);
+            padding: 18px;
+        }
+
+        .composer-title {
+            margin: 0 0 12px;
+            font-size: 18px;
+            color: var(--text-dark);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 180px 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .composer input,
+        .composer textarea,
+        .composer select {
+            width: 100%;
+            border: 1px solid var(--neutral-border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font: inherit;
+            background: #fff;
+            color: var(--text-dark);
+        }
+
+        .composer textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .composer-actions {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .status {
+            font-size: 13px;
+            color: var(--grey-medium);
+            min-height: 18px;
+        }
+
+        .post-btn {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            cursor: pointer;
+        }
+
+        .post-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .feed-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .feed-head h2 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .refresh-btn {
+            border: 1px solid var(--neutral-border);
+            background: #fff;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .post-item {
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 12px;
+            background: #fff;
+        }
+
+        .feed-controls {
+            display: grid;
+            grid-template-columns: 180px 1fr auto;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .feed-controls select,
+        .feed-controls input {
+            border: 1px solid var(--neutral-border);
+            border-radius: 8px;
+            padding: 9px 11px;
+            font: inherit;
+        }
+
+        .feed-controls button {
+            border: 1px solid var(--neutral-border);
+            border-radius: 8px;
+            background: #fff;
+            padding: 9px 12px;
+            cursor: pointer;
+        }
+
+        .post-meta {
+            font-size: 12px;
+            color: var(--grey-medium);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .post-item h3 {
+            margin: 0 0 8px;
+            font-size: 18px;
+            color: var(--text-dark);
+        }
+
+        .post-content {
+            margin: 0;
+            color: var(--grey-dark);
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(139, 58, 43, 0.12);
+            color: var(--primary-dark);
+            border-radius: 999px;
+            padding: 3px 8px;
+            font-size: 11px;
+            margin-right: 6px;
+            margin-top: 8px;
+        }
+
+        .empty {
+            text-align: center;
+            color: var(--grey-medium);
+            padding: 28px 12px;
+        }
+
+        .post-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .action-btn {
+            border: 1px solid var(--neutral-border);
+            border-radius: 999px;
+            background: #fff;
+            color: var(--grey-dark);
+            padding: 7px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .action-btn.active {
+            border-color: var(--primary-color);
+            color: var(--primary-dark);
+            background: rgba(139, 58, 43, 0.12);
+        }
+
+        .comments-block {
+            margin-top: 12px;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            padding-top: 12px;
+            display: none;
+        }
+
+        .comments-block.open {
+            display: block;
+        }
+
+        .comment-item {
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 8px;
+        }
+
+        .comment-meta {
+            font-size: 12px;
+            color: var(--grey-medium);
+            margin-bottom: 4px;
+        }
+
+        .comment-content {
+            margin: 0;
+            white-space: pre-wrap;
+            color: var(--grey-dark);
+            line-height: 1.5;
+        }
+
+        .comment-form {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .comment-form input {
+            border: 1px solid var(--neutral-border);
+            border-radius: 8px;
+            padding: 9px 11px;
+            font: inherit;
+        }
+
+        .comment-form button {
+            border: none;
+            border-radius: 8px;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 9px 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        @media (max-width: 860px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .feed-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .comment-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="main-content">
+        <div class="community-wrap">
+            <section class="community-hero">
+                <h1>OPTMO Community</h1>
+                <p>Share workflows, ask for feedback, and collaborate with creators in podcast, video, music, and events.</p>
+            </section>
+
+            <section class="community-grid">
+                <article class="card composer">
+                    <h2 class="composer-title">Create a Post</h2>
+                    <div id="composerStatus" class="status">Log in to publish posts.</div>
+                    <form id="postForm">
+                        <div class="form-row">
+                            <input id="postTitle" type="text" maxlength="150" placeholder="Post title" required>
+                            <select id="postCategory">
+                                <option value="general">General</option>
+                                <option value="podcast">Podcast</option>
+                                <option value="video">Video</option>
+                                <option value="music">Music</option>
+                                <option value="events">Events</option>
+                                <option value="collab">Collaboration</option>
+                            </select>
+                            <input id="postTags" type="text" placeholder="Tags: workflow, editing, growth">
+                        </div>
+                        <textarea id="postContent" maxlength="5000" placeholder="What are you working on? What help do you need?" required></textarea>
+                        <div class="composer-actions">
+                            <span class="status" id="submitStatus"></span>
+                            <button id="submitBtn" class="post-btn" type="submit">Publish Post</button>
+                        </div>
+                    </form>
+                </article>
+
+                <article class="card">
+                    <div class="feed-head">
+                        <h2>Community Feed</h2>
+                        <button id="refreshFeed" class="refresh-btn" type="button"><i class="fas fa-rotate"></i> Refresh</button>
+                    </div>
+                    <div class="feed-controls">
+                        <select id="feedCategoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="general">General</option>
+                            <option value="podcast">Podcast</option>
+                            <option value="video">Video</option>
+                            <option value="music">Music</option>
+                            <option value="events">Events</option>
+                            <option value="collab">Collaboration</option>
+                        </select>
+                        <input id="feedSearchInput" type="text" placeholder="Search title, content, or tags">
+                        <button id="clearFeedFilters" type="button">Clear</button>
+                    </div>
+                    <div id="feedStatus" class="status"></div>
+                    <div id="communityFeed"></div>
+                </article>
+            </section>
+        </div>
+    </main>
+
+    <script src="js/main.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.0/dist/pocketbase.umd.js" defer></script>
+    <script src="js/pocketbase-client.js" defer></script>
+    <script>
+        function escapeHtml(str) {
+            return (str || '').replace(/[&<>'"]/g, function(c) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\'' : '&#39;', '"' : '&quot;' })[c];
+            });
+        }
+
+        function formatDate(value) {
+            try {
+                return new Date(value).toLocaleString();
+            } catch (_) {
+                return value || '';
+            }
+        }
+
+        function parseTags(raw) {
+            return (raw || '')
+                .split(',')
+                .map(t => t.trim().toLowerCase())
+                .filter(Boolean)
+                .slice(0, 8);
+        }
+
+        const communityState = {
+            posts: [],
+            commentsByPost: {},
+            reactionsByPost: {}
+        };
+
+        function renderComments(postId) {
+            const comments = communityState.commentsByPost[postId] || [];
+            if (!comments.length) {
+                return '<div class="status">No comments yet. Start the conversation.</div>';
+            }
+
+            return comments.map(comment => {
+                const userName = comment.expand && comment.expand.user && (comment.expand.user.name || comment.expand.user.email)
+                    ? (comment.expand.user.name || comment.expand.user.email)
+                    : 'Community Member';
+
+                return `
+                    <div class="comment-item">
+                        <div class="comment-meta">${escapeHtml(userName)} • ${escapeHtml(formatDate(comment.created))}</div>
+                        <p class="comment-content">${escapeHtml(comment.content)}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderFeed(posts) {
+            const feed = document.getElementById('communityFeed');
+            if (!posts || posts.length === 0) {
+                feed.innerHTML = '<div class="empty">No posts yet. Be the first to start a discussion.</div>';
+                return;
+            }
+
+            feed.innerHTML = posts.map(post => {
+                const userName = post.expand && post.expand.user && (post.expand.user.name || post.expand.user.email)
+                    ? (post.expand.user.name || post.expand.user.email)
+                    : 'Community Member';
+                const tags = Array.isArray(post.tags) ? post.tags : [];
+                const reactionSummary = communityState.reactionsByPost[post.id] || { likeCount: 0, likedByCurrentUser: false };
+                const commentCount = (communityState.commentsByPost[post.id] || []).length;
+
+                return `
+                    <div class="post-item">
+                        <div class="post-meta">
+                            <span><i class="fas fa-user"></i> ${escapeHtml(userName)}</span>
+                            <span><i class="fas fa-folder"></i> ${escapeHtml(post.category || 'general')}</span>
+                            <span><i class="fas fa-clock"></i> ${escapeHtml(formatDate(post.created))}</span>
+                        </div>
+                        <h3>${escapeHtml(post.title)}</h3>
+                        <p class="post-content">${escapeHtml(post.content)}</p>
+                        <div>${tags.map(tag => `<span class="tag">#${escapeHtml(tag)}</span>`).join('')}</div>
+                        <div class="post-actions">
+                            <button class="action-btn ${reactionSummary.likedByCurrentUser ? 'active' : ''}" data-like-post="${post.id}" type="button">
+                                <i class="fas fa-heart"></i> Like (${reactionSummary.likeCount || 0})
+                            </button>
+                            <button class="action-btn" data-toggle-comments="${post.id}" type="button">
+                                <i class="fas fa-comment"></i> Comments (${commentCount})
+                            </button>
+                        </div>
+                        <div class="comments-block" id="comments-${post.id}">
+                            <div id="comment-list-${post.id}">${renderComments(post.id)}</div>
+                            <form class="comment-form" data-comment-form="${post.id}">
+                                <input type="text" maxlength="2000" placeholder="Write a comment" required>
+                                <button type="submit">Post</button>
+                            </form>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function loadFeed() {
+            const feedStatus = document.getElementById('feedStatus');
+            feedStatus.textContent = 'Loading posts...';
+            const category = document.getElementById('feedCategoryFilter').value;
+            const search = document.getElementById('feedSearchInput').value.trim();
+            const result = await getCommunityFeed(30, { category, search });
+
+            if (!result.success) {
+                feedStatus.textContent = 'Feed unavailable. If this is your first run, apply PocketBase migrations first.';
+                renderFeed([]);
+                return;
+            }
+
+            const posts = result.posts || [];
+            communityState.posts = posts;
+
+            const postIds = posts.map(p => p.id);
+            const currentUser = getCurrentUser();
+
+            const commentResult = await getCommunityCommentsForPosts(postIds);
+            if (commentResult.success) {
+                communityState.commentsByPost = commentResult.commentsByPost || {};
+            } else {
+                communityState.commentsByPost = {};
+            }
+
+            const reactionResult = await getCommunityReactionSummary(postIds, currentUser ? currentUser.id : null);
+            if (reactionResult.success) {
+                communityState.reactionsByPost = reactionResult.summaryByPost || {};
+            } else {
+                communityState.reactionsByPost = {};
+            }
+
+            feedStatus.textContent = `${posts.length} posts loaded.`;
+            renderFeed(posts);
+        }
+
+        function updateComposerState() {
+            const user = getCurrentUser();
+            const composerStatus = document.getElementById('composerStatus');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (!user) {
+                composerStatus.innerHTML = 'You are not logged in. <a href="login.html">Log in</a> to publish posts.';
+                submitBtn.disabled = true;
+                return null;
+            }
+
+            composerStatus.textContent = `Posting as ${user.name || user.email}`;
+            submitBtn.disabled = false;
+            return user;
+        }
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const user = updateComposerState();
+            if (!user) return;
+
+            const title = document.getElementById('postTitle').value.trim();
+            const category = document.getElementById('postCategory').value;
+            const content = document.getElementById('postContent').value.trim();
+            const tags = parseTags(document.getElementById('postTags').value);
+            const submitBtn = document.getElementById('submitBtn');
+            const submitStatus = document.getElementById('submitStatus');
+
+            if (!title || !content) {
+                submitStatus.textContent = 'Title and content are required.';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitStatus.textContent = 'Publishing...';
+
+            const result = await createCommunityPost(user.id, title, content, category, tags);
+
+            if (!result.success) {
+                submitStatus.textContent = 'Unable to publish. Ensure migrations are applied and you are logged in.';
+                submitBtn.disabled = false;
+                return;
+            }
+
+            document.getElementById('postForm').reset();
+            submitStatus.textContent = 'Post published.';
+            submitBtn.disabled = false;
+            await loadFeed();
+        }
+
+        async function handleFeedInteraction(event) {
+            const likeBtn = event.target.closest('[data-like-post]');
+            if (likeBtn) {
+                const postId = likeBtn.getAttribute('data-like-post');
+                const user = getCurrentUser();
+                if (!user) {
+                    alert('Please log in to like posts.');
+                    return;
+                }
+
+                likeBtn.disabled = true;
+                const result = await toggleCommunityReaction(user.id, postId, 'like');
+                likeBtn.disabled = false;
+
+                if (!result.success) {
+                    alert('Unable to update like right now.');
+                    return;
+                }
+
+                await loadFeed();
+                return;
+            }
+
+            const toggleBtn = event.target.closest('[data-toggle-comments]');
+            if (toggleBtn) {
+                const postId = toggleBtn.getAttribute('data-toggle-comments');
+                const block = document.getElementById(`comments-${postId}`);
+                if (block) {
+                    block.classList.toggle('open');
+                }
+            }
+        }
+
+        async function handleCommentSubmit(event) {
+            const form = event.target.closest('[data-comment-form]');
+            if (!form) return;
+
+            event.preventDefault();
+            const postId = form.getAttribute('data-comment-form');
+            const input = form.querySelector('input');
+            const user = getCurrentUser();
+
+            if (!user) {
+                alert('Please log in to comment.');
+                return;
+            }
+
+            const content = (input.value || '').trim();
+            if (!content) return;
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+
+            const result = await createCommunityComment(user.id, postId, content);
+            submitBtn.disabled = false;
+
+            if (!result.success) {
+                alert('Unable to post comment. Check PocketBase migrations and auth status.');
+                return;
+            }
+
+            input.value = '';
+            await loadFeed();
+
+            const block = document.getElementById(`comments-${postId}`);
+            if (block) {
+                block.classList.add('open');
+            }
+        }
+
+        window.addEventListener('load', async function() {
+            document.getElementById('postForm').addEventListener('submit', handleSubmit);
+            document.getElementById('refreshFeed').addEventListener('click', loadFeed);
+            document.getElementById('feedCategoryFilter').addEventListener('change', loadFeed);
+            document.getElementById('feedSearchInput').addEventListener('input', function() {
+                clearTimeout(window.__communitySearchTimer);
+                window.__communitySearchTimer = setTimeout(loadFeed, 280);
+            });
+            document.getElementById('clearFeedFilters').addEventListener('click', function() {
+                document.getElementById('feedCategoryFilter').value = 'all';
+                document.getElementById('feedSearchInput').value = '';
+                loadFeed();
+            });
+            document.getElementById('communityFeed').addEventListener('click', handleFeedInteraction);
+            document.getElementById('communityFeed').addEventListener('submit', handleCommentSubmit);
+            updateComposerState();
+            await loadFeed();
+        });
+    </script>
+</body>
+</html>

@@ -317,65 +317,7 @@
     </style>
 </head>
 <body>
-    <header class="top-header">
-        <div class="header-left">
-            <button class="menu-btn" id="menuBtn" title="Open Menu">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="logo-small"><a href="index.html">OPTMO</a></div>
-        </div>
-        <div class="header-center"></div>
-        <div class="header-right">
-            <!-- Language Switcher -->
-            <div class="language-menu">
-                <button class="icon-btn language-btn" id="languageBtn" title="Language">
-                    <i class="fas fa-globe"></i>
-                </button>
-                <div class="language-dropdown" id="languageDropdown" style="display: none;">
-                    <button class="language-option" data-lang="en">
-                        <i class="fas fa-check" style="display: none;"></i> English
-                    </button>
-                    <button class="language-option" data-lang="zh">
-                        <i class="fas fa-check" style="display: none;"></i> 中文
-                    </button>
-                    <button class="language-option" data-lang="es">
-                        <i class="fas fa-check" style="display: none;"></i> Español
-                    </button>
-                    <button class="language-option" data-lang="fr">
-                        <i class="fas fa-check" style="display: none;"></i> Français
-                    </button>
-                    <button class="language-option" data-lang="de">
-                        <i class="fas fa-check" style="display: none;"></i> Deutsch
-                    </button>
-                    <button class="language-option" data-lang="ja">
-                        <i class="fas fa-check" style="display: none;"></i> 日本語
-                    </button>
-                    <button class="language-option" data-lang="pt">
-                        <i class="fas fa-check" style="display: none;"></i> Português
-                    </button>
-                    <button class="language-option" data-lang="ko">
-                        <i class="fas fa-check" style="display: none;"></i> 한국어
-                    </button>
-                    <button class="language-option" data-lang="it">
-                        <i class="fas fa-check" style="display: none;"></i> Italiano
-                    </button>
-                    <button class="language-option" data-lang="ru">
-                        <i class="fas fa-check" style="display: none;"></i> Русский
-                    </button>
-                    <button class="language-option" data-lang="ar">
-                        <i class="fas fa-check" style="display: none;"></i> العربية
-                    </button>
-                    <button class="language-option" data-lang="hi">
-                        <i class="fas fa-check" style="display: none;"></i> हिन्दी
-                    </button>
-                    <button class="language-option" data-lang="vi">
-                        <i class="fas fa-check" style="display: none;"></i> Tiếng Việt
-                    </button>
-                </div>
-            </div>
-            <a href="index.html" class="plan-btn" style="padding: 6px 12px; font-size: 12px; width: auto;">Home</a>
-        </div>
-    </header>
+    <!-- header replaced by shared partial -->
 
     <main class="main-content">
         <div class="account-container" id="notLoggedIn" style="display: none;">
@@ -399,16 +341,16 @@
                 </div>
 
                 <nav class="account-nav">
-                    <li><a href="#" onclick="switchTab('overview')" class="nav-link active" data-tab="overview">
+                    <li><a href="#" onclick="switchTab(event, 'overview')" class="nav-link active" data-tab="overview">
                         <i class="fas fa-chart-line"></i> Overview
                     </a></li>
-                    <li><a href="#" onclick="switchTab('profile')" class="nav-link" data-tab="profile">
+                    <li><a href="#" onclick="switchTab(event, 'profile')" class="nav-link" data-tab="profile">
                         <i class="fas fa-user"></i> Profile
                     </a></li>
-                    <li><a href="#" onclick="switchTab('plan')" class="nav-link" data-tab="plan">
+                    <li><a href="#" onclick="switchTab(event, 'plan')" class="nav-link" data-tab="plan">
                         <!-- Removed paid plan tab -->
                     </a></li>
-                    <li><a href="#" onclick="switchTab('settings')" class="nav-link" data-tab="settings">
+                    <li><a href="#" onclick="switchTab(event, 'settings')" class="nav-link" data-tab="settings">
                         <i class="fas fa-gear"></i> Settings
                     </a></li>
                 </nav>
@@ -425,15 +367,15 @@
                     <h2 class="section-title">Welcome Back!</h2>
                     <div class="stat-grid">
                         <div class="stat-card">
-                            <p class="stat-number">7</p>
+                            <p class="stat-number" id="statProjects">7</p>
                             <p class="stat-label">Projects</p>
                         </div>
                         <div class="stat-card">
-                            <p class="stat-number">42</p>
+                            <p class="stat-number" id="statEvents">42</p>
                             <p class="stat-label">Workflows</p>
                         </div>
                         <div class="stat-card">
-                            <p class="stat-number">128</p>
+                            <p class="stat-number" id="statLogins">128</p>
                             <p class="stat-label">Hours Saved</p>
                         </div>
                     </div>
@@ -521,9 +463,9 @@
         </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.0/dist/pocketbase.umd.js"></script>
-    <script src="js/pocketbase-client.js"></script>
-    <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.0/dist/pocketbase.umd.js" defer></script>
+    <script src="js/pocketbase-client.js" defer></script>
+    <script src="js/main.js" defer></script>
     <script>
         // Check if user is logged in
         window.addEventListener('load', async function() {
@@ -553,18 +495,24 @@
                 try {
                     const analyticsResult = await getUserAnalytics(user.id);
                     if (analyticsResult.success) {
-                        document.querySelector('.stat-value:nth-child(1)').textContent = analyticsResult.analytics.total_projects || '0';
-                        document.querySelector('.stat-value:nth-child(2)').textContent = analyticsResult.analytics.total_events || '0';
-                        document.querySelector('.stat-value:nth-child(3)').textContent = analyticsResult.analytics.total_logins || '0';
+                        document.getElementById('statProjects').textContent = analyticsResult.analytics.total_projects || '0';
+                        document.getElementById('statEvents').textContent = analyticsResult.analytics.total_events || '0';
+                        document.getElementById('statLogins').textContent = analyticsResult.analytics.total_logins || '0';
                     }
                 } catch (error) {
                     console.log('Analytics loading:', error.message);
                 }
+
+                if (window.location.hash === '#settings') {
+                    switchTab(null, 'settings');
+                }
             }
         });
 
-        function switchTab(tab) {
-            event.preventDefault();
+        function switchTab(event, tab) {
+            if (event) {
+                event.preventDefault();
+            }
             
             // Hide all sections
             document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));

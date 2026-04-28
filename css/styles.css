@@ -6,10 +6,14 @@
 }
 
 :root {
-    --primary-color: #800020;
-    --primary-dark: #5c0016;
+    --primary-color: #8B3A2B; /* redwood tone */
+    --primary-dark: #5C281E; /* darker redwood */
+    --purpleheart: var(--accent-wood);
     --secondary-color: #8B4513;
     --accent-wood: #A0662F;
+    --accent-wood-light: #D19A63;
+    --accent-wood-dark: #6B3B1A;
+    --mustard: #D4AF37;
     --neutral-dark: #3d3d3d;
     --neutral-light: #f5f5f5;
     --neutral-border: #d4d4d4;
@@ -26,6 +30,78 @@
     --header-height: 64px;
 }
 
+/* Global link styling: use wood-brown and remove default blue/underlines */
+a, a:link, a:visited {
+    color: var(--accent-wood);
+    text-decoration: none;
+}
+
+/* Policy / legal pages: ensure full-width readable container and consistent cards */
+.policy-page {
+    min-height: calc(100vh - var(--header-height) - 80px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px 0 64px;
+    background: linear-gradient(180deg, var(--neutral-light) 0%, #ffffff 100%);
+    color: var(--text-dark);
+}
+
+.policy-page .container {
+    width: min(1100px, 96vw);
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.policy-page .card {
+    width: 100%;
+    padding: 32px;
+    border-radius: 12px;
+    background: var(--white);
+    border: 1px solid rgba(27,27,27,0.06);
+    box-shadow: 0 12px 36px rgba(27,27,27,0.06);
+    border-top: 4px solid var(--primary-color);
+}
+
+.policy-page h1 { font-size: clamp(1.6rem, 3.2vw, 2.2rem); margin-bottom: 8px; color: var(--primary-dark); }
+.policy-page h2 { font-size: 1.05rem; margin-top: 22px; margin-bottom: 8px; color: var(--primary-color); }
+.policy-page p, .policy-page li { color: var(--grey-dark); line-height: 1.7; }
+.policy-page a { color: var(--accent-wood); font-weight: 600; }
+.policy-page .meta { color: var(--grey-medium); margin-bottom: 14px; font-size: 0.95rem; }
+.policy-page .top-links { display:flex; gap:12px; flex-wrap:wrap; margin-bottom: 16px; }
+.policy-page .top-links a { display:inline-block; padding:8px 12px; border-radius:8px; background: rgba(160,102,47,0.06); color: var(--accent-wood); text-decoration:none; font-weight:600; }
+.policy-page .top-links a:hover { background: rgba(160,102,47,0.12); color: var(--accent-wood-dark); }
+
+@media (max-width: 720px) {
+    .policy-page { padding: 20px 0 48px; }
+    .policy-page .container { width: 96vw; padding: 12px; }
+    .policy-page .card { padding: 18px; }
+}
+
+/* Interactive touch/hover feedback: turn items purpleheart while touching/hovering/focusing */
+.interactive, a, button, .nav-item, .footer-link, .icon-btn, .account-btn, .cta-button, .submit-btn {
+    transition: color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+a:hover, a:active, a:focus,
+.nav-item:hover, .nav-item:active, .nav-item:focus,
+.footer-link:hover, .footer-link:active, .footer-link:focus,
+.icon-btn:hover, .icon-btn:active, .icon-btn:focus,
+.account-btn:hover, .account-btn:active, .account-btn:focus,
+.cta-button:hover, .cta-button:active, .cta-button:focus,
+.submit-btn:hover, .submit-btn:active, .submit-btn:focus {
+    color: var(--accent-wood); /* wood-brown on interaction */
+}
+
+/* Ensure backgrounds that use wood-brown keep their color but change text/icon when interacted */
+.btn, .icon-btn:hover, .account-btn:hover {
+    color: #fff;
+}
+a:hover, a:focus {
+    color: #7a4f2a;
+    text-decoration: underline;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -38,6 +114,21 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+}
+
+.top-header,
+.sidebar,
+.main-content,
+.policy-page,
+.footer {
+    position: relative;
+    z-index: 2;
+}
+
+.top-header,
+.sidebar {
+    z-index: 900;
 }
 
 .container {
@@ -63,6 +154,22 @@ body {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     gap: 10px;
     min-height: var(--header-height);
+}
+
+/* Force header section ordering so right-side controls remain on the right */
+.top-header > .header-left { order: 1; }
+.top-header > .header-center { order: 2; flex: 1 1 auto; display: flex; align-items: center; justify-content: center; }
+.top-header > .header-right { order: 3; margin-left: auto; display: flex; align-items: center; gap: 20px; }
+
+/* Prevent fixed header from overlapping page content.
+   Apply consistent top spacing for main content and policy pages. */
+main, .main-content, .policy-page {
+    padding-top: calc(var(--header-height) + 12px);
+}
+
+/* Ensure immediate children of body that are main-like also respect header offset */
+body > main, body > .main-content {
+    display: block;
 }
 
 .header-left {
@@ -139,7 +246,7 @@ body {
     content: '⌘K';
     font-size: 11px;
     color: var(--text-light);
-    background: rgba(128, 0, 32, 0.08);
+    background: rgba(139, 58, 43, 0.08);
     padding: 3px 6px;
     border-radius: 3px;
     margin-left: 8px;
@@ -213,23 +320,25 @@ body {
     align-items: center;
     justify-content: center;
     min-width: 32px;
-    height: 32px;
-    background: linear-gradient(135deg, var(--primary-color), #a0002a);
-    color: var(--white);
-    font-weight: 700;
-    font-size: 14px;
-    border-radius: 8px;
-    padding: 0 8px;
-    box-shadow: 0 2px 8px rgba(128, 0, 32, 0.3);
+        height: 36px;
+        background: linear-gradient(135deg, var(--secondary-color), var(--primary-dark));
+        color: var(--neutral-dark);
+        box-shadow: 0 2px 8px rgba(139, 58, 43, 0.3);
+        box-shadow: 0 2px 8px rgba(107, 59, 26, 0.3);
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 8px;
+            padding: 0 8px;
+            box-shadow: 0 2px 8px rgba(107, 59, 26, 0.3);
 }
 
 .search-nav-controls {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: var(--white);
-    padding: 4px 6px;
-    border-radius: 6px;
+        background: var(--neutral-light);
+        padding: 6px 8px;
+        border-radius: 8px;
     border: 1px solid var(--neutral-border);
 }
 
@@ -303,7 +412,7 @@ body {
     font-size: 10px;
     font-weight: 600;
     color: var(--primary-color);
-    background: rgba(128, 0, 32, 0.1);
+    background: rgba(139, 58, 43, 0.1);
     padding: 2px 8px;
     border-radius: 10px;
 }
@@ -547,7 +656,7 @@ mark.search-highlight.current {
 .suggestion-category {
     font-size: 11px;
     color: var(--text-light);
-    background: rgba(128, 0, 32, 0.08);
+    background: rgba(139, 58, 43, 0.08);
     padding: 3px 8px;
     border-radius: 3px;
     margin-left: 12px;
@@ -757,12 +866,25 @@ mark.search-highlight.current {
     border-right: 1px solid var(--neutral-border);
     overflow-y: auto;
     overflow-x: hidden;
-    z-index: 800;
+    z-index: 1100;
     display: flex;
     flex-direction: column;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
     transform: translateX(-100%) !important;
+}
+
+/* Force darker wood-brown for all sidebar text to override global link rules */
+.sidebar, .sidebar a, .sidebar .nav-section-title, .sidebar .nav-item, .sidebar .nav-item i {
+    color: var(--accent-wood-dark) !important;
+}
+.sidebar a:hover, .sidebar .nav-item:hover {
+    color: var(--accent-wood) !important;
+}
+.sidebar .nav-item.active {
+    color: var(--accent-wood-dark) !important;
+    border-left-color: var(--accent-wood-dark) !important;
+    background: rgba(107, 59, 26, 0.08) !important;
 }
 
 .sidebar.active {
@@ -844,7 +966,7 @@ mark.search-highlight.current {
 .nav-section-title {
     font-size: 12px;
     font-weight: 700;
-    color: var(--text-light);
+    color: var(--accent-wood-dark);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding: 0 16px;
@@ -856,7 +978,7 @@ mark.search-highlight.current {
     align-items: center;
     gap: 12px;
     padding: 8px 16px;
-    color: var(--text-dark);
+    color: var(--accent-wood-dark);
     text-decoration: none;
     font-size: 14px;
     transition: all 0.15s ease;
@@ -867,27 +989,27 @@ mark.search-highlight.current {
 
 .nav-item i {
     width: 18px;
-    color: var(--text-light);
+    color: var(--accent-wood-dark);
 }
 
 .nav-item:hover {
     background: var(--neutral-light);
-    color: var(--primary-color);
+    color: var(--accent-wood);
 }
 
 .nav-item:hover i {
-    color: var(--primary-color);
+    color: var(--accent-wood);
 }
 
 .nav-item.active {
-    background: rgba(128, 0, 32, 0.1);
-    color: var(--primary-color);
-    border-left-color: var(--primary-color);
+    background: rgba(107, 59, 26, 0.08);
+    color: var(--accent-wood-dark);
+    border-left-color: var(--accent-wood-dark);
     font-weight: 600;
 }
 
 .nav-item.active i {
-    color: var(--primary-color);
+    color: var(--accent-wood-dark);
 }
 
 .sidebar-footer {
@@ -956,7 +1078,7 @@ mark.search-highlight.current {
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     display: none;
-    z-index: 750;
+    z-index: 1050;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -996,7 +1118,7 @@ mark.search-highlight.current {
     font-size: 18px;
     z-index: 900;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(128, 0, 32, 0.3);
+    box-shadow: 0 4px 12px rgba(139, 58, 43, 0.3);
     opacity: 0;
     animation: fadeInUp 0.3s ease forwards;
 }
@@ -1004,7 +1126,7 @@ mark.search-highlight.current {
 .back-to-top:hover {
     background: var(--primary-dark);
     transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(128, 0, 32, 0.4);
+    box-shadow: 0 6px 16px rgba(139, 58, 43, 0.4);
 }
 
 @keyframes fadeInUp {
@@ -1018,7 +1140,7 @@ mark.search-highlight.current {
     }
 }
 
-/* Toast Notifications */
+/* Toast / temporary notification */
 .toast-notification {
     position: fixed;
     bottom: 100px;
@@ -1074,7 +1196,7 @@ mark.search-highlight.current {
     padding: 12px 36px;
     font-size: 15px;
     font-weight: 600;
-    background: var(--secondary-color);
+    background: var(--purpleheart);
     color: var(--white);
     border: none;
     border-radius: 6px;
@@ -1085,15 +1207,115 @@ mark.search-highlight.current {
 }
 
 .cta-button:hover {
-    background: var(--accent-wood);
+    background: var(--accent-wood-dark); /* wood-brown hover */
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(160, 102, 47, 0.4);
+    box-shadow: 0 10px 20px rgba(163, 102, 47, 0.28);
+}
+
+/* Ensure anchor-based buttons behave like buttons and remain clickable */
+.cta-button, .secondary-button {
+    display: inline-block;
+    text-decoration: none;
+    line-height: 1;
+    vertical-align: middle;
+    pointer-events: auto;
+}
+
+.secondary-button {
+    padding: 10px 18px;
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: none;
+}
+
+.secondary-button:hover {
+    background: var(--primary-color);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+/* Force high-contrast defaults for anchor buttons to avoid inheritance issues */
+.cta-button {
+    background: var(--accent-wood) !important;
+    color: var(--white) !important;
+    border: none !important;
+}
+
+.cta-button:focus, .cta-button:active {
+    outline: 2px solid rgba(255,255,255,0.08);
 }
 
 /* Featured Section */
 .featured-section {
     padding: 60px 20px;
     background: var(--white);
+}
+
+/* Marketplace listing styles */
+.listing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    align-items: stretch;
+}
+
+.listing-card {
+    background: var(--white);
+    border: 1px solid var(--neutral-border);
+    border-radius: 8px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 340px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+}
+
+.listing-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: var(--primary-dark);
+}
+
+.listing-card p, .listing-card ul, .listing-card small {
+    color: var(--text-dark);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.listing-card ul {
+    margin: 8px 0 0 18px;
+}
+
+.listing-demos {
+    margin-top: 10px;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.card-actions .cta-button {
+    flex: 1 1 auto;
+    padding: 10px 14px;
+    text-align: center;
+}
+
+.card-actions .secondary-button {
+    flex: 1 1 auto;
+}
+
+@media (max-width: 720px) {
+    .listing-grid { grid-template-columns: 1fr; }
+    .listing-card { min-height: auto; }
+    .card-actions { flex-direction: column; }
 }
 
 .section-title {
@@ -1366,7 +1588,7 @@ mark.search-highlight.current {
 
 .pricing-card.featured-plan {
     border-color: var(--primary-color);
-    box-shadow: 0 8px 24px rgba(128, 0, 32, 0.15);
+    box-shadow: 0 8px 24px rgba(160, 102, 47, 0.12);
     transform: scale(1.05);
 }
 
@@ -1382,7 +1604,7 @@ mark.search-highlight.current {
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.5px;
-    box-shadow: 0 4px 12px rgba(128, 0, 32, 0.3);
+    box-shadow: 0 4px 12px rgba(160, 102, 47, 0.22);
 }
 
 .plan-header {
@@ -1465,8 +1687,8 @@ mark.search-highlight.current {
 }
 
 .plan-btn.pro-btn:hover {
-    background: #5c0016;
-    border-color: #5c0016;
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
 }
 
 /* Cookie Notice */
@@ -1601,68 +1823,107 @@ mark.search-highlight.current {
 /* Footer */
 .footer {
     background: var(--neutral-dark);
-    color: #d1d5db;
+    color: var(--mustard);
     padding: 40px 20px 20px;
     margin-left: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.15s ease;
 }
+
+.footer-slogan strong { color: var(--mustard); font-size: 14px; }
 
 .footer-content {
+    display: block;
+}
+
+.footer-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+    margin-bottom: 18px;
 }
 
-.footer-section h5 {
-    color: var(--white);
-    margin-bottom: 12px;
-    font-size: 14px;
-    font-weight: 600;
+.footer-title {
+    color: var(--mustard);
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 700;
 }
 
-.footer-section p {
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-.footer-section ul {
-    list-style: none;
-}
-
-.footer-section a {
-    color: #d1d5db;
-    text-decoration: none;
-    font-size: 13px;
+.footer-link {
+    color: var(--mustard) !important;
+    text-decoration: none !important;
+    font-size: 11px;
     display: block;
     margin-bottom: 8px;
-    transition: color 0.3s ease;
+    font-weight: 600;
+    line-height: 1.6;
+    opacity: 0.98;
+    transition: color 0.12s ease, opacity 0.12s ease;
 }
 
-.footer-section a:hover {
-    color: var(--accent-wood);
+.footer-link:hover {
+    color: var(--primary-dark) !important;
+    text-decoration: none !important;
+    opacity: 1;
+}
+
+/* Ensure footer list links look like text (override any other rules) */
+.footer .footer-links a,
+.footer .footer-link {
+    color: var(--mustard) !important;
+    text-decoration: none !important;
+    font-size: 11px !important;
+    margin-bottom: 8px !important;
+    line-height: 1.6 !important;
+}
+
+/* Ensure all anchors inside footer use mustard color */
+.footer a {
+    color: var(--mustard) !important;
+}
+
+/* Ensure footer-bottom inline links are mustard-colored */
+.footer-bottom a {
+    color: var(--mustard) !important;
+    text-decoration: none !important;
+}
+
+/* Make footer anchors look like plain text while remaining clickable */
+.footer a.footer-link {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
 }
 
 .footer-bottom {
-    border-top: 1px solid #4b5563;
-    padding-top: 20px;
-    text-align: center;
-    font-size: 12px;
-    color: #9ca3af;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
 }
 
-.footer-bottom a,
-.footer-bottom a:link,
-.footer-bottom a:visited,
-.footer-bottom a:hover,
-.footer-bottom a:active {
-    color: #E1AD01 !important;
-    text-decoration: none;
-    font-weight: 600;
+.footer-bottom p { color: var(--mustard); margin: 0; font-size: 11px; }
+.footer-bottom .legal-links { display:flex; gap:0; align-items:center; }
+.footer-bottom .legal-links a { color: var(--mustard) !important; text-decoration: none; font-weight:600; font-size:11px; padding: 0 8px; }
+.footer-bottom .legal-links a + a::before { content: "|"; color: var(--mustard) !important; padding-right: 8px; margin-left: 4px; }
+
+/* Ensure no blue, large, or underlined links in footer */
+.footer a, .footer p, .footer .footer-link, .footer .legal-links a {
+    color: var(--mustard) !important;
+    text-decoration: none !important;
+}
+.footer a:hover, .footer a:focus { color: var(--primary-dark) !important; text-decoration: none !important; }
+
+@media (max-width: 900px) {
+    .footer-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-.footer-bottom a:hover {
-    text-decoration: underline;
+@media (max-width: 600px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; gap:8px; }
 }
 
 /* Responsive Design */
@@ -1899,7 +2160,7 @@ body.sidebar-open .main-content {
 .form-group textarea:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+    box-shadow: 0 0 0 3px rgba(160, 102, 47, 0.08);
 }
 
 .form-group textarea {
@@ -1910,7 +2171,7 @@ body.sidebar-open .main-content {
 .submit-btn {
     width: 100%;
     padding: 14px 24px;
-    background: var(--primary-color);
+    background: var(--purpleheart);
     color: white;
     border: none;
     border-radius: 6px;
@@ -1925,9 +2186,9 @@ body.sidebar-open .main-content {
 }
 
 .submit-btn:hover {
-    background: var(--primary-dark);
+    background: var(--accent-wood-dark); /* wood-brown hover */
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(128, 0, 32, 0.3);
+    box-shadow: 0 4px 12px rgba(160, 102, 47, 0.22);
 }
 
 .submit-btn:active {
@@ -2812,4 +3073,79 @@ body.sidebar-open .main-content {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--text-light);
+}
+
+/* Ensure header and footer are always visible across media queries */
+.top-header,
+.footer {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.top-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1100 !important;
+}
+
+.footer {
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
+/* Strong override: ensure header layout always keeps right-side controls on the right */
+header.top-header, .top-header {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+}
+
+header.top-header > .header-left, .top-header > .header-left {
+    order: 1 !important;
+    flex: 0 0 auto !important;
+    min-width: 72px !important;
+}
+
+header.top-header > .header-center, .top-header > .header-center {
+    order: 2 !important;
+    flex: 1 1 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+header.top-header > .header-right, .top-header > .header-right {
+    order: 3 !important;
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 18px !important;
+}
+
+/* Defensive: ensure dropdowns and language panels stay positioned to the right */
+.dropdown-menu, .language-dropdown {
+    right: 0 !important;
+    left: auto !important;
+}
+
+/* Floating sidebar toggle fallback for pages that lack header markup */
+#sidebarToggleFloating {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 1200 !important;
+    background: var(--white);
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(27,27,27,0.08);
+    cursor: pointer;
+    color: var(--text-dark);
+}
+
+#sidebarToggleFloating:hover {
+    background: rgba(212,175,55,0.04);
 }
