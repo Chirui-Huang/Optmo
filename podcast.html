@@ -69,28 +69,72 @@
                         <textarea id="epNotes" placeholder="Timestamps, removes, special instructions"></textarea>
                     </div>
                     <div style="display:flex;gap:8px;margin-top:10px;">
-                        <a class="cta-button" id="requestPackage" href="#">Request Starter Package</a>
-                        <a class="secondary-button" id="emailBrief" href="#">Email Brief</a>
+                        <button type="button" class="cta-button" id="requestPackage">Request Starter Package</button>
+                        <button type="button" class="secondary-button" id="emailBrief">Email Brief</button>
                     </div>
 
+                    <p id="podcastActionStatus" style="margin-top:10px;color:var(--text-light);font-size:13px;"></p>
+
                     <script>
-                        document.getElementById('requestPackage').addEventListener('click', function(e){
-                            e.preventDefault();
-                            const title = encodeURIComponent(document.getElementById('epTitle').value || '[No title]');
-                            const files = encodeURIComponent(document.getElementById('epFiles').value || '');
-                            const date = encodeURIComponent(document.getElementById('epDate').value || '');
-                            const notes = encodeURIComponent(document.getElementById('epNotes').value || '');
-                            const body = `Hi,%0A%0AI'd like to order the Podcast Editing Starter Package.%0A%0ATitle: ${title}%0AFiles: ${files}%0APreferred date: ${date}%0ANotes: ${notes}%0A%0AThanks,%0A[Your name]`;
-                            window.location.href = `mailto:optmo256@gmail.com?subject=Order%3A%20Podcast%20Editing%20Starter%20Package&body=${body}`;
+                        function getPodcastBrief() {
+                            return {
+                                title: (document.getElementById('epTitle').value || '').trim(),
+                                people: (document.getElementById('epPeople').value || '').trim(),
+                                files: (document.getElementById('epFiles').value || '').trim(),
+                                date: (document.getElementById('epDate').value || '').trim(),
+                                notes: (document.getElementById('epNotes').value || '').trim()
+                            };
+                        }
+
+                        function showPodcastStatus(message, isError = false) {
+                            const statusEl = document.getElementById('podcastActionStatus');
+                            if (!statusEl) return;
+                            statusEl.textContent = message;
+                            statusEl.style.color = isError ? '#b91c1c' : 'var(--text-light)';
+                        }
+
+                        document.getElementById('requestPackage').addEventListener('click', function(){
+                            const brief = getPodcastBrief();
+                            if (!brief.title || !brief.files) {
+                                showPodcastStatus('Please provide Episode Title and Raw Files link before requesting a package.', true);
+                                return;
+                            }
+
+                            const subject = encodeURIComponent('Order: Podcast Editing Starter Package');
+                            const bodyText = [
+                                "Hi,",
+                                "",
+                                "I'd like to order the Podcast Editing Starter Package.",
+                                "",
+                                `Title: ${brief.title}`,
+                                `Host / Guests: ${brief.people || '[Not provided]'}`,
+                                `Files: ${brief.files}`,
+                                `Preferred date: ${brief.date || '[Not provided]'}`,
+                                `Notes: ${brief.notes || '[None]'}`,
+                                "",
+                                "Thanks,",
+                                "[Your name]"
+                            ].join('\n');
+
+                            window.location.href = `mailto:optmo256@gmail.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
                         });
 
-                        document.getElementById('emailBrief').addEventListener('click', function(e){
-                            e.preventDefault();
-                            const title = encodeURIComponent(document.getElementById('epTitle').value || '[No title]');
-                            const files = encodeURIComponent(document.getElementById('epFiles').value || '');
-                            const notes = encodeURIComponent(document.getElementById('epNotes').value || '');
-                            const body = `Episode brief:%0A%0ATitle: ${title}%0AFiles: ${files}%0ANotes:%0A${notes}`;
-                            window.location.href = `mailto:optmo256@gmail.com?subject=Episode%20Brief%3A%20${title}&body=${body}`;
+                        document.getElementById('emailBrief').addEventListener('click', function(){
+                            const brief = getPodcastBrief();
+                            const safeTitle = brief.title || 'Untitled Episode';
+                            const subject = encodeURIComponent(`Episode Brief: ${safeTitle}`);
+                            const bodyText = [
+                                'Episode brief:',
+                                '',
+                                `Title: ${safeTitle}`,
+                                `Host / Guests: ${brief.people || '[Not provided]'}`,
+                                `Files: ${brief.files || '[Not provided]'}`,
+                                `Preferred date: ${brief.date || '[Not provided]'}`,
+                                'Notes:',
+                                brief.notes || '[None]'
+                            ].join('\n');
+
+                            window.location.href = `mailto:optmo256@gmail.com?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
                         });
                     </script>
                 </aside>

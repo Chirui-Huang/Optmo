@@ -3,21 +3,178 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Join the OPTMO online community to share workflows, find collaborators, and grow creative projects.">
     <title>Online Community | OPTMO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .community-hub {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 28px 20px 54px;
+        }
+
+        .community-hero {
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            padding: 28px;
+            background: linear-gradient(130deg, rgba(139, 58, 43, 0.12), rgba(160, 102, 47, 0.08));
+        }
+
+        .community-hero h1 {
+            margin: 0;
+            font-size: clamp(1.8rem, 3.8vw, 2.6rem);
+            color: var(--text-dark);
+        }
+
+        .community-hero p {
+            margin: 10px 0 0;
+            color: var(--grey-dark);
+            max-width: 760px;
+            line-height: 1.75;
+        }
+
+        .hero-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 16px;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .hero-btn.secondary {
+            background: #fff;
+            color: var(--primary-dark);
+            border: 1px solid rgba(0, 0, 0, 0.12);
+        }
+
+        .section-title {
+            margin: 24px 0 10px;
+            font-size: 1.45rem;
+            color: var(--text-dark);
+        }
+
+        .section-subtitle {
+            margin: 0 0 14px;
+            color: var(--grey-medium);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .feature-card {
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            background: #fff;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            padding: 16px;
+        }
+
+        .feature-card i {
+            color: var(--primary-color);
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .feature-card h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--text-dark);
+        }
+
+        .feature-card p {
+            margin: 8px 0 0;
+            color: var(--grey-dark);
+            font-size: 0.94rem;
+            line-height: 1.6;
+        }
+
+        .quick-start {
+            margin-top: 14px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            background: #fff;
+            padding: 16px;
+        }
+
+        .quick-start ol {
+            margin: 10px 0 0 18px;
+            color: var(--grey-dark);
+            line-height: 1.8;
+        }
+
+        .quick-start strong {
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 960px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
 
     <main class="main-content">
-        <div class="container">
-            <section class="hero">
+        <div class="community-hub">
+            <section class="community-hero">
                 <h1>Online Community</h1>
-                <p class="lead">Placeholder: Online Community content coming soon.</p>
+                <p>This is your collaboration hub for podcast, video, music, and event creators. Share your progress, ask technical questions, find collaborators, and grow projects with feedback from other builders.</p>
+                <div class="hero-actions">
+                    <button class="hero-btn" onclick="window.location.href='community.html'">
+                        <i class="fas fa-users"></i> Open Community Feed
+                    </button>
+                    <button class="hero-btn secondary" onclick="window.location.href='signup.html'">
+                        <i class="fas fa-user-plus"></i> Join as a Member
+                    </button>
+                </div>
+            </section>
+
+            <h2 class="section-title">What You Can Do Here</h2>
+            <p class="section-subtitle">Build meaningful connections around real creative workflows.</p>
+            <section class="feature-grid">
+                <article class="feature-card">
+                    <i class="fas fa-comments"></i>
+                    <h3>Discuss Workflows</h3>
+                    <p>Ask for feedback on your production pipelines, tools, and automation ideas, then get practical responses from peers.</p>
+                </article>
+                <article class="feature-card">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Find Collaborators</h3>
+                    <p>Post what you are building and what support you need, then connect with people who have matching skills.</p>
+                </article>
+                <article class="feature-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Share Wins and Lessons</h3>
+                    <p>Publish project milestones, growth results, and lessons learned so the whole community can improve faster.</p>
+                </article>
+            </section>
+
+            <section class="quick-start">
+                <h2 class="section-title" style="margin-top:0;">Quick Start</h2>
+                <ol>
+                    <li><strong>Create your account:</strong> Sign up and complete your profile so others can understand your focus.</li>
+                    <li><strong>Publish your first post:</strong> Use the Community Feed to introduce your project and goals.</li>
+                    <li><strong>Join ongoing conversations:</strong> Reply to posts where you can contribute insights or resources.</li>
+                    <li><strong>Build momentum weekly:</strong> Share updates and invite collaborators for your next milestone.</li>
+                </ol>
             </section>
         </div>
     </main>
 
-    <script src="js/main.js"></script>
+    <script src="js/main.js" defer></script>
 </body>
 </html>

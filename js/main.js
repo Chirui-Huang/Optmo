@@ -1056,8 +1056,9 @@ function applySystemLanguage() {
     if (dropdownLinks[2]) dropdownLinks[2].innerHTML = `<i class="fas fa-cog"></i> ${t.dropdownSettings}`;
     if (dropdownLinks[3]) dropdownLinks[3].innerHTML = `<i class="fas fa-heart"></i> ${t.dropdownSupport}`;
 
-    // Toggle auth action: Log in when not logged in, Logout when logged in
-    const isLoggedIn = !!localStorage.getItem('optmo_logged_in');
+    // Toggle auth action: derive auth state from PocketBase when available.
+    const currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+    const isLoggedIn = !!(currentUser || localStorage.getItem('optmo_logged_in'));
     if (authAction) {
         if (isLoggedIn) {
             authAction.innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.dropdownLogout}`;
@@ -2158,18 +2159,24 @@ if (declineCookiesBtn) {
 
 // Track user interactions (only if consent given)
 document.addEventListener('click', (e) => {
-    if (e.target.closest('.pick-card')) {
-        const cardTitle = e.target.closest('.pick-card').querySelector('h4').textContent;
+    const pickCard = e.target.closest('.pick-card');
+    if (pickCard) {
+        const titleEl = pickCard.querySelector('h4');
+        const cardTitle = titleEl ? titleEl.textContent : 'Unknown Project';
         trackEvent('project_view', { project: cardTitle });
     }
     
-    if (e.target.closest('.filter-btn')) {
-        const filter = e.target.closest('.filter-btn').getAttribute('data-filter');
+    const filterBtn = e.target.closest('.filter-btn');
+    if (filterBtn) {
+        const filter = filterBtn.getAttribute('data-filter');
         trackEvent('filter_used', { filter: filter });
     }
     
-    if (e.target.closest('.plan-btn')) {
-        const plan = e.target.closest('.pricing-card').querySelector('h4').textContent;
+    const planBtn = e.target.closest('.plan-btn');
+    if (planBtn) {
+        const pricingCard = planBtn.closest('.pricing-card');
+        const titleEl = pricingCard ? pricingCard.querySelector('h4') : null;
+        const plan = titleEl ? titleEl.textContent : 'Unknown Plan';
         trackEvent('plan_click', { plan: plan });
     }
 });

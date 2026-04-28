@@ -204,8 +204,7 @@
 
                 <div class="demo-notice">
                     <strong>🔐 Secure Login</strong><br>
-                    Sign in with your account credentials. If the email doesn't exist yet,
-                    OPTMO will create your account automatically.
+                    Sign in with your existing account credentials.
                 </div>
 
                 <form id="loginForm">
@@ -227,8 +226,8 @@
                 </form>
 
                 <div class="login-footer">
-                    <p>Don't have an account? <a href="#signup">Sign up here</a></p>
-                    <p style="margin-top: 12px; font-size: 12px;"><a href="#home">Forgot password?</a></p>
+                    <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+                    <p style="margin-top: 12px; font-size: 12px;"><a href="reset-password.html">Forgot password?</a></p>
                     <p style="margin-top: 12px; font-size: 12px; line-height: 1.6;">
                         <a href="privacy-policy.html">Privacy Policy</a> |
                         <a href="terms-of-service.html">Terms of Service</a> |
@@ -239,9 +238,9 @@
         </div>
     </main>
 
-    <script src="js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.0/dist/pocketbase.umd.js"></script>
-    <script src="js/pocketbase-client.js"></script>
+    <script src="js/main.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.0/dist/pocketbase.umd.js" defer></script>
+    <script src="js/pocketbase-client.js" defer></script>
     <script>
         // PocketBase Login Handler
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
@@ -295,28 +294,11 @@
                         window.location.href = 'account.html';
                     }, 1000);
                 } else {
-                    // Try signup if user doesn't exist
-                    if (result.error.includes('Failed to authenticate')) {
-                        // User doesn't exist, prompt to create account
-                        const displayName = email.split('@')[0];
-                        const signupResult = await signUpUser(email, password, displayName);
-
-                        if (signupResult.success) {
-                            errorDiv.textContent = '✓ Account created! Redirecting...';
-                            errorDiv.style.borderLeftColor = '#10b981';
-                            errorDiv.style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
-                            errorDiv.style.color = '#047857';
-                            errorDiv.classList.add('show');
-
-                            setTimeout(() => {
-                                window.location.href = 'account.html';
-                            }, 1000);
-                        } else {
-                            throw new Error(signupResult.error);
-                        }
-                    } else {
-                        throw new Error(result.error);
+                    const authFailed = (result.error || '').toLowerCase().includes('failed to authenticate');
+                    if (authFailed) {
+                        throw new Error('Invalid email or password. Please try again, or create a new account from the sign up page.');
                     }
+                    throw new Error(result.error);
                 }
             } catch (error) {
                 errorDiv.textContent = '❌ ' + (error.message || 'Login failed. Please try again.');
@@ -324,7 +306,7 @@
                 console.error('Auth error:', error);
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = '🔐 Login to Account';
+                submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Account';
             }
         });
     </script>
