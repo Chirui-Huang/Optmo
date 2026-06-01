@@ -126,8 +126,6 @@ function getTranslations() {
             dropdownLogout: 'Logout',
             dropdownDashboard: 'My Dashboard',
             dropdownSettings: 'Settings',
-            devTitle: 'Site Under Development',
-            devText: 'This website is still being developed. Some features may change or be unavailable. Not all content is finalized or accurate yet. Thank you for your patience!',
             automationTitle: 'How Automation Works',
             automationAuthor: 'AI-Powered',
             automationDate: 'Instant Results',
@@ -311,8 +309,6 @@ function getTranslations() {
             premiumTitle: '专业会员',
             premiumDesc: '解锁完整自动化与 AI 工作流',
             premiumBtn: '升级到专业版',
-            devTitle: '网站开发中',
-            devText: '本网站仍在开发中。部分功能可能会调整或暂不可用。并非所有内容都已最终确认或完全准确。感谢您的耐心！',
             automationTitle: '自动化如何工作',
             automationAuthor: 'AI 驱动',
             automationDate: '即时结果',
@@ -525,8 +521,6 @@ function getTranslations() {
             premiumTitle: 'Membresía Pro',
             premiumDesc: 'Desbloquea automatización completa y flujos con IA',
             premiumBtn: 'Actualizar a Pro',
-            devTitle: 'Sitio en desarrollo',
-            devText: 'Este sitio web aún está en desarrollo. Algunas funciones pueden cambiar o no estar disponibles. No todo el contenido está finalizado o es completamente preciso. ¡Gracias por tu paciencia!',
             automationTitle: 'Cómo funciona la automatización',
             automationAuthor: 'Impulsado por IA',
             automationDate: 'Resultados instantáneos',
@@ -1102,9 +1096,6 @@ function applySystemLanguage() {
     const heroButtons = document.querySelectorAll('.hero-content .cta-button');
     if (heroButtons[0]) heroButtons[0].textContent = t.startTrial;
     if (heroButtons[1]) heroButtons[1].textContent = t.contactSales;
-
-    setText('.development-notice strong', t.devTitle);
-    setText('.development-notice p', t.devText);
 
     const sectionTitles = document.querySelectorAll('.section-title');
     if (sectionTitles[0]) sectionTitles[0].textContent = t.automationTitle;
